@@ -3,17 +3,22 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finanzas Pro AI (Go Backend)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Finanzas Pro AI</title>
+    
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Finanzas AI">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -21,20 +26,23 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* PWA Safe Area for iPhones without home button */
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
     </style>
 </head>
 
-<body class="text-slate-800 pb-20 md:pb-0">
+<body class="text-slate-800 pb-24 md:pb-0 selection:bg-indigo-100 selection:text-indigo-800">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-20 pt-[env(safe-area-inset-top)]">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="bg-gradient-to-br from-blue-600 to-indigo-600 p-2 rounded-lg text-white shadow-lg shadow-blue-200">
-                    <i data-lucide="activity" class="w-6 h-6"></i>
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
+                    <i data-lucide="brain-circuit" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-slate-900 leading-tight">Finanzas Pro <span class="text-indigo-600 text-sm">GO</span></h1>
-                    <p id="connection-status" class="text-xs text-slate-500">Conectando...</p>
+                    <h1 class="text-xl font-bold text-slate-900 leading-tight tracking-tight">Finanzas Pro <span class="text-indigo-600">AI</span></h1>
+                    <p id="connection-status" class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Conectando...</p>
                 </div>
             </div>
             <div class="hidden md:flex gap-1 bg-slate-100 p-1 rounded-lg">
@@ -49,17 +57,26 @@
     <main id="app-content" class="max-w-6xl mx-auto px-4 py-6 min-h-screen">
         </main>
 
-    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 flex justify-around p-3 z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <button onclick="app.setTab('dashboard')" id="mob-dashboard" class="flex flex-col items-center text-slate-400"><i data-lucide="activity" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-medium">Resumen</span></button>
-        <button onclick="app.setTab('transactions')" id="mob-transactions" class="flex flex-col items-center text-slate-400"><i data-lucide="wallet" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-medium">Movs</span></button>
-        <button onclick="app.setTab('investments')" id="mob-investments" class="flex flex-col items-center text-slate-400"><i data-lucide="trending-up" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-medium">Inversión</span></button>
-        <button onclick="app.setTab('accounts')" id="mob-accounts" class="flex flex-col items-center text-slate-400"><i data-lucide="landmark" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-medium">Cuentas</span></button>
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-lg border-t border-slate-200 flex justify-around p-3 pb-[env(safe-area-inset-bottom)] z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <button onclick="app.setTab('dashboard')" id="mob-dashboard" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="layout-dashboard" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Resumen</span></button>
+        <button onclick="app.setTab('transactions')" id="mob-transactions" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="wallet" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Movs</span></button>
+        <button onclick="app.setTab('investments')" id="mob-investments" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="trending-up" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Inversión</span></button>
+        <button onclick="app.setTab('accounts')" id="mob-accounts" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="landmark" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Cuentas</span></button>
     </nav>
 
     <script>
         // --- CONFIG & STATE ---
         const API_URL = "https://finanzas-backend-877934393466.us-central1.run.app/api";
         
+        // Registrar Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Esto es necesario para que sea instalable
+                // Debes crear un archivo sw.js vacío o básico en la raíz si quieres caché
+                navigator.serviceWorker.register('sw.js').then(reg => console.log('SW ok')).catch(err => console.log('SW fail'));
+            });
+        }
+
         const state = {
             activeTab: 'dashboard',
             transactions: [],
@@ -84,14 +101,14 @@
                 return await res.json();
             } catch (e) {
                 console.error("API Error:", e);
-                document.getElementById('connection-status').textContent = '🔴 Error Backend';
+                document.getElementById('connection-status').textContent = '🔴 Sin Conexión';
+                document.getElementById('connection-status').className = 'text-[10px] font-medium text-red-500 uppercase tracking-wider';
                 return null;
             }
         }
 
         async function initApp() {
             try {
-                // Cargar datos iniciales
                 const [trans, invs, accs] = await Promise.all([
                     fetchAPI('/transactions'),
                     fetchAPI('/investments'),
@@ -102,21 +119,19 @@
                 if (invs) state.investments = invs;
                 if (accs) state.accounts = accs;
 
-                document.getElementById('connection-status').textContent = '🟢 Go Backend';
+                document.getElementById('connection-status').textContent = '🟢 Sistema Online';
+                document.getElementById('connection-status').className = 'text-[10px] font-medium text-emerald-600 uppercase tracking-wider';
                 app.render();
             } catch (e) {
                 console.error("Init Error", e);
             }
         }
 
-        // --- GEMINI API (VIA GO BACKEND) ---
+        // --- GEMINI API WRAPPER ---
         async function callGemini(prompt, systemInstruction = "", imageBase64 = null) {
             try {
-                // Limpiar base64 header si existe para enviarlo al backend
                 let cleanBase64 = null;
-                if (imageBase64) {
-                    cleanBase64 = imageBase64.split(',')[1]; 
-                }
+                if (imageBase64) cleanBase64 = imageBase64.split(',')[1]; 
 
                 const data = await fetchAPI('/ai/generate', 'POST', {
                     prompt,
@@ -128,11 +143,12 @@
             } catch (error) { return null; }
         }
 
-        // --- CALCULATIONS (Igual que antes) ---
+        // --- CALCULATIONS ---
         function getStats() {
             let totalIncome = 0;
             let totalExpense = 0;
             const accountBalances = {};
+            const expenseByCategory = {};
 
             state.accounts.forEach(a => accountBalances[a.name] = 0);
 
@@ -146,6 +162,10 @@
                 } else {
                     totalExpense += amt;
                     accountBalances[t.account] -= amt;
+                    
+                    // Categorizar gastos
+                    if(!expenseByCategory[t.category]) expenseByCategory[t.category] = 0;
+                    expenseByCategory[t.category] += amt;
                 }
             });
 
@@ -164,7 +184,8 @@
                 investmentValue,
                 investmentCost,
                 totalNetWorth: (totalIncome - totalExpense) + investmentValue,
-                accounts: accountBalances
+                accounts: accountBalances,
+                expenseByCategory
             };
         }
 
@@ -181,11 +202,12 @@
                     const deskBtn = document.getElementById(`nav-${id}`);
                     const mobBtn = document.getElementById(`mob-${id}`);
                     if (id === state.activeTab) {
-                        deskBtn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all bg-white text-blue-600 shadow-sm";
-                        mobBtn.className = "flex flex-col items-center text-blue-600";
+                        deskBtn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200";
+                        mobBtn.className = "flex flex-col items-center text-indigo-600 p-2 scale-105 transition-transform";
+                        mobBtn.innerHTML = mobBtn.innerHTML.replace('text-slate-400', 'text-indigo-600');
                     } else {
-                        deskBtn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all text-slate-500 hover:text-slate-700";
-                        mobBtn.className = "flex flex-col items-center text-slate-400";
+                        deskBtn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all text-slate-500 hover:text-slate-700 hover:bg-slate-200/50";
+                        mobBtn.className = "flex flex-col items-center text-slate-400 p-2";
                     }
                 });
 
@@ -209,34 +231,35 @@
                 const savingsRate = stats.totalIncome > 0 ? Math.round(((stats.totalIncome - stats.totalExpense) / stats.totalIncome) * 100) : 0;
 
                 container.innerHTML = `
-                    <div class="space-y-6 fade-in">
-                        <div class="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl p-6 text-white shadow-lg shadow-indigo-200 relative overflow-hidden">
+                    <div class="space-y-6 fade-in pb-10">
+                        <div class="bg-gradient-to-r from-slate-900 to-indigo-900 rounded-2xl p-6 text-white shadow-xl shadow-indigo-900/20 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-8 opacity-10"><i data-lucide="brain-circuit" class="w-32 h-32"></i></div>
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
                                 <div>
-                                    <h2 class="text-2xl font-bold flex items-center gap-2"><i data-lucide="sparkles" class="text-yellow-300"></i> Analista AI</h2>
-                                    <p class="text-indigo-100 mt-1 text-sm">Obtén un reporte inteligente.</p>
+                                    <h2 class="text-2xl font-bold flex items-center gap-2">Asesor Financiero AI</h2>
+                                    <p class="text-indigo-200 mt-1 text-sm max-w-md">Análisis profundo de tus patrones de gasto y salud financiera.</p>
                                 </div>
-                                <button onclick="app.generateAIReport()" id="btn-ai-report" class="bg-white text-indigo-700 hover:bg-indigo-50 px-4 py-2 rounded-lg font-medium shadow-none border-none text-sm transition-colors flex items-center gap-2">
-                                    ${state.aiLoading ? '<div class="loader mr-2"></div> Analizando...' : 'Generar Reporte'}
+                                <button onclick="app.generateAIReport()" id="btn-ai-report" class="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 px-5 py-2.5 rounded-xl font-medium shadow-lg text-sm transition-all flex items-center gap-2 group">
+                                    ${state.aiLoading ? '<div class="loader border-white border-t-transparent mr-2"></div> Analizando Datos...' : '<i data-lucide="sparkles" class="w-4 h-4 text-yellow-300 group-hover:rotate-12 transition-transform"></i> Generar Informe'}
                                 </button>
                             </div>
-                            <div id="ai-result" class="mt-6 hidden bg-white/10 backdrop-blur-md rounded-lg p-4 border border-white/20 text-sm whitespace-pre-line leading-relaxed"></div>
+                            <div id="ai-result" class="mt-6 hidden bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 text-sm whitespace-pre-line leading-relaxed font-light tracking-wide text-indigo-50"></div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            ${renderCard('Patrimonio Neto', `$${stats.totalNetWorth.toLocaleString()}`, 'Cuentas + Inversiones', 'emerald', 'trending-up')}
-                            ${renderCard('Liquidez', `$${stats.balance.toLocaleString()}`, `Ing: $${stats.totalIncome.toLocaleString()}`, 'blue', 'wallet')}
-                            ${renderCard('Inversiones', `$${stats.investmentValue.toLocaleString()}`, `${pl >= 0 ? '+' : ''}$${pl.toLocaleString()} (P/L)`, 'purple', 'building-2', pl >= 0 ? 'text-emerald-600' : 'text-red-500')}
-                            ${renderCard('Ahorro', `${savingsRate}%`, 'De tus ingresos', 'orange', 'pie-chart')}
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                            ${renderCard('Patrimonio', `$${stats.totalNetWorth.toLocaleString()}`, 'Total Activos', 'indigo', 'wallet')}
+                            ${renderCard('Flujo Neto', `$${stats.balance.toLocaleString()}`, `Ingresos: $${stats.totalIncome.toLocaleString()}`, 'emerald', 'activity')}
+                            ${renderCard('Inversiones', `$${stats.investmentValue.toLocaleString()}`, `${pl >= 0 ? '+' : ''}$${pl.toLocaleString()} (P/L)`, 'violet', 'trending-up', pl >= 0 ? 'text-emerald-600' : 'text-red-500')}
+                            ${renderCard('Ahorro', `${savingsRate}%`, 'Tasa Mensual', 'blue', 'piggy-bank')}
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-80">
-                                <h3 class="font-bold text-slate-700 mb-4 text-sm">Flujo de Caja</h3>
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Flujo de Caja</h3>
                                 <div class="relative h-60 w-full"><canvas id="chartCashFlow"></canvas></div>
                             </div>
-                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-80">
-                                <h3 class="font-bold text-slate-700 mb-4 text-sm">Distribución por Cuentas</h3>
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Distribución de Activos</h3>
                                 <div class="relative h-60 w-full flex justify-center"><canvas id="chartAccounts"></canvas></div>
                             </div>
                         </div>
@@ -248,14 +271,24 @@
                     type: 'bar',
                     data: {
                         labels: ['Ingresos', 'Gastos'],
-                        datasets: [{ data: [stats.totalIncome, stats.totalExpense], backgroundColor: ['#10b981', '#ef4444'], borderRadius: 6 }]
+                        datasets: [{ 
+                            data: [stats.totalIncome, stats.totalExpense], 
+                            backgroundColor: ['#10b981', '#ef4444'], 
+                            borderRadius: 8,
+                            barThickness: 50
+                        }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { legend: { display: false } },
+                        scales: { y: { grid: { display: false } }, x: { grid: { display: false } } }
+                    }
                 });
 
                 const accounts = Object.keys(stats.accounts);
                 const values = Object.values(stats.accounts);
-                const colors = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899', '#10b981', '#6366f1', '#14b8a6', '#f43f5e'];
+                const colors = ['#6366f1', '#8b5cf6', '#d946ef', '#f43f5e', '#ec4899', '#06b6d4', '#10b981', '#f59e0b'];
 
                 if (accounts.length > 0) {
                     const ctxAcc = document.getElementById('chartAccounts').getContext('2d');
@@ -263,49 +296,48 @@
                         type: 'doughnut',
                         data: {
                             labels: accounts,
-                            datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }]
+                            datasets: [{ data: values, backgroundColor: colors, borderWidth: 0, hoverOffset: 4 }]
                         },
-                        options: { responsive: true, maintainAspectRatio: false }
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: false, 
+                            cutout: '75%',
+                            plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8 } } }
+                        }
                     });
                 } else {
-                    document.getElementById('chartAccounts').parentNode.innerHTML = '<div class="h-full flex items-center justify-center text-slate-400 text-sm">Sin datos</div>';
+                    document.getElementById('chartAccounts').parentNode.innerHTML = '<div class="h-full flex flex-col items-center justify-center text-slate-400 text-xs"><i data-lucide="bar-chart-2" class="w-8 h-8 mb-2 opacity-50"></i>Sin datos suficientes</div>';
                 }
             },
 
             // --- ACCOUNTS MANAGER ---
             renderAccounts: (container) => {
                 container.innerHTML = `
-                    <div class="max-w-3xl mx-auto space-y-6 fade-in">
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                            <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                                <i data-lucide="plus-circle" class="text-blue-600 w-5 h-5"></i> Crear Nueva Cuenta
-                            </h2>
-                            <form onsubmit="event.preventDefault(); app.addAccount();" class="flex gap-2">
-                                <input type="text" id="new-acc-name" placeholder="Ej: Banco Galicia" class="flex-1 p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 shadow-md">Crear</button>
+                    <div class="max-w-3xl mx-auto space-y-6 fade-in pb-20">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                            <h2 class="text-lg font-bold text-slate-800 mb-4">Añadir Cuenta</h2>
+                            <form onsubmit="event.preventDefault(); app.addAccount();" class="flex gap-3">
+                                <input type="text" id="new-acc-name" placeholder="Ej: Billetera Virtual" class="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-medium hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all">Crear</button>
                             </form>
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                             <div class="p-4 border-b border-slate-200 bg-slate-50">
-                                <h3 class="font-bold text-slate-700">Mis Cuentas y Bancos</h3>
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                            <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+                                <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wide">Mis Cuentas</h3>
                             </div>
                             <div class="divide-y divide-slate-100">
                                 ${state.accounts.map(acc => `
-                                    <div class="p-4 flex justify-between items-center hover:bg-slate-50 group">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                                                <i data-lucide="landmark" class="w-4 h-4"></i>
+                                    <div class="p-5 flex justify-between items-center hover:bg-slate-50 transition-colors group">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                                <i data-lucide="landmark" class="w-5 h-5"></i>
                                             </div>
                                             <span class="font-medium text-slate-800">${acc.name}</span>
                                         </div>
-                                        <div class="flex gap-2">
-                                            <button onclick="app.editAccount('${acc.id}', '${acc.name}')" class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Editar Nombre">
-                                                <i data-lucide="pencil" class="w-4 h-4"></i>
-                                            </button>
-                                            <button onclick="app.deleteAccount('${acc.id}')" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
+                                        <div class="flex gap-1">
+                                            <button onclick="app.editAccount('${acc.id}', '${acc.name}')" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                                            <button onclick="app.deleteAccount('${acc.id}')" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -320,94 +352,100 @@
                 const accountOptions = state.accounts.map(a => `<option value="${a.name}">${a.name}</option>`).join('');
 
                 container.innerHTML = `
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in pb-20">
                         <div class="lg:col-span-1 space-y-4">
-                            <div class="bg-white rounded-xl shadow-sm border border-emerald-100 p-4 bg-gradient-to-br from-emerald-50 to-teal-50">
-                                <h2 class="text-sm font-bold text-emerald-800 mb-3 flex items-center gap-2"><i data-lucide="camera" class="w-4 h-4"></i> Escanear Ticket</h2>
-                                <div class="mb-3">
-                                    <label class="text-xs font-semibold text-emerald-700 uppercase tracking-wider ml-1">Cuenta destino</label>
-                                    <select id="scanner-account" class="w-full p-2 text-sm bg-white border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-emerald-900">
-                                        ${accountOptions}
-                                    </select>
+                            
+                            <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-5 relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                <h2 class="text-sm font-bold text-emerald-900 mb-3 flex items-center gap-2 relative z-10"><i data-lucide="scan-line" class="w-4 h-4"></i> Scanner AI</h2>
+                                
+                                <div class="mb-3 relative z-10">
+                                    <select id="scanner-account" class="w-full p-2 text-sm bg-emerald-50/50 border border-emerald-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-emerald-800">${accountOptions}</select>
                                 </div>
-                                <div id="scanner-upload-area" class="border-2 border-dashed border-emerald-200 rounded-lg p-6 text-center hover:bg-white/50 transition-colors relative cursor-pointer">
-                                    <input type="file" accept="image/*" onchange="app.handleImageUpload(this)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                                    <i data-lucide="upload" class="mx-auto text-emerald-400 mb-2 w-6 h-6"></i>
-                                    <p class="text-xs text-emerald-600 font-medium">Sube foto</p>
-                                </div>
-                                <div id="scanner-preview-area" class="hidden space-y-3">
-                                    <div class="relative rounded-lg overflow-hidden border border-emerald-200 h-32 bg-slate-100">
-                                        <img id="img-preview" class="w-full h-full object-contain">
-                                        <button onclick="app.clearImage()" class="absolute top-1 right-1 bg-white/80 p-1 rounded-full text-slate-500 hover:text-red-500"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                <div id="scanner-upload-area" class="border-2 border-dashed border-emerald-200 rounded-xl p-6 text-center hover:bg-emerald-50/30 transition-colors relative cursor-pointer bg-white">
+                                    <input type="file" accept="image/*" onchange="app.handleImageUpload(this)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+                                    <div class="bg-emerald-100 w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2 text-emerald-600">
+                                        <i data-lucide="camera" class="w-5 h-5"></i>
                                     </div>
-                                    <button onclick="app.analyzeImage()" id="btn-scan" class="w-full bg-emerald-600 text-white py-1.5 rounded-lg text-xs font-medium hover:bg-emerald-700 shadow-md">Detectar Movimientos</button>
+                                    <p class="text-xs text-emerald-700 font-medium">Foto del ticket</p>
+                                </div>
+                                <div id="scanner-preview-area" class="hidden space-y-3 relative z-10">
+                                    <div class="relative rounded-lg overflow-hidden border border-emerald-100 h-32 bg-slate-50">
+                                        <img id="img-preview" class="w-full h-full object-contain">
+                                        <button onclick="app.clearImage()" class="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-red-500 backdrop-blur-sm"><i data-lucide="x" class="w-3 h-3"></i></button>
+                                    </div>
+                                    <button onclick="app.analyzeImage()" id="btn-scan" class="w-full bg-emerald-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-200 transition-all">Procesar Imagen</button>
                                     <div id="scan-actions" class="hidden flex gap-2">
-                                        <button onclick="app.importAllScanned()" class="flex-1 bg-emerald-100 text-emerald-700 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-200 border border-emerald-200">Guardar Todos</button>
+                                        <button onclick="app.importAllScanned()" class="flex-1 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-xs font-bold border border-emerald-200 hover:bg-emerald-100">Guardar Todo</button>
                                     </div>
                                     <div id="scan-results" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar"></div>
                                 </div>
                             </div>
 
-                            <div class="bg-white rounded-xl shadow-sm border border-indigo-100 p-4 bg-gradient-to-br from-indigo-50 to-purple-50">
-                                <h2 class="text-sm font-bold text-indigo-800 mb-2 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4"></i> Entrada Rápida</h2>
-                                <textarea id="magic-input" placeholder="Ej: Cena 4500 con Tarjeta" class="w-full p-2.5 text-sm bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 resize-none h-20 mb-2"></textarea>
-                                <button onclick="app.handleMagicEntry()" id="btn-magic" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-1.5 rounded-lg text-xs font-medium shadow-md hover:from-violet-700 hover:to-indigo-700">
-                                    ${state.magicLoading ? 'Procesando...' : 'Autocompletar'}
+                            <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-5 relative overflow-hidden">
+                                <h2 class="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-500"></i> Registro Inteligente</h2>
+                                <textarea id="magic-input" placeholder="Ej: Almuerzo en McDonald's $8500 con tarjeta Galicia" class="w-full p-3 text-sm bg-indigo-50/30 border border-indigo-100 rounded-xl focus:ring-2 focus:ring-indigo-500 resize-none h-20 mb-3 transition-all"></textarea>
+                                <button onclick="app.handleMagicEntry()" id="btn-magic" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all">
+                                    ${state.magicLoading ? 'Interpretando...' : 'Autocompletar'}
                                 </button>
                             </div>
 
-                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sticky top-24">
-                                <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="plus" class="text-blue-600 w-5 h-5"></i> Nuevo</h2>
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sticky top-24">
+                                <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">Registro Manual</h2>
                                 <form id="trans-form" onsubmit="event.preventDefault(); app.addTransaction();" class="flex flex-col gap-4">
-                                    <div class="flex bg-slate-100 p-1 rounded-lg">
-                                        <button type="button" onclick="app.setTransType('expense')" id="btn-expense" class="flex-1 py-2 text-sm font-medium rounded-md bg-white text-red-600 shadow-sm transition-all">Gasto</button>
-                                        <button type="button" onclick="app.setTransType('income')" id="btn-income" class="flex-1 py-2 text-sm font-medium rounded-md text-slate-500 transition-all">Ingreso</button>
+                                    <div class="flex bg-slate-100 p-1 rounded-xl">
+                                        <button type="button" onclick="app.setTransType('expense')" id="btn-expense" class="flex-1 py-2 text-sm font-bold rounded-lg bg-white text-red-500 shadow-sm transition-all">Gasto</button>
+                                        <button type="button" onclick="app.setTransType('income')" id="btn-income" class="flex-1 py-2 text-sm font-bold rounded-lg text-slate-400 transition-all">Ingreso</button>
                                     </div>
                                     <input type="hidden" id="t-type" value="expense">
-                                    ${renderInput('Monto', 'number', 't-amount', '0.00')}
+                                    ${renderInput('Monto', 'number', 't-amount', '0.00', '', 'step="0.01"')}
                                     ${renderInput('Descripción', 'text', 't-desc', 'Ej: Supermercado')}
                                     <div class="grid grid-cols-2 gap-3">
                                         <div class="flex flex-col gap-1 w-full">
-                                            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Cuenta</label>
-                                            <select id="t-account" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">${accountOptions}</select>
+                                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Cuenta</label>
+                                            <select id="t-account" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">${accountOptions}</select>
                                         </div>
-                                        ${renderSelect('Categoría', 't-cat', ['Comida', 'Transporte', 'Servicios', 'Ocio', 'Salud', 'Sueldo', 'Ventas', 'Otros'])}
+                                        ${renderSelect('Categoría', 't-cat', ['Comida', 'Transporte', 'Servicios', 'Ocio', 'Salud', 'Sueldo', 'Ventas', 'Hogar', 'Educación', 'Otros'])}
                                     </div>
                                     ${renderInput('Fecha', 'date', 't-date', '', new Date().toISOString().split('T')[0])}
-                                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 shadow-md">Guardar</button>
+                                    <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all mt-2">Guardar Movimiento</button>
                                 </form>
                             </div>
                         </div>
 
                         <div class="lg:col-span-2">
-                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                                <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-                                    <h3 class="font-bold text-slate-700">Historial</h3>
-                                    <span class="text-xs bg-slate-200 px-2 py-1 rounded text-slate-600">${state.transactions.length} registros</span>
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full min-h-[500px]">
+                                <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center sticky top-0 backdrop-blur-sm z-10">
+                                    <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wide">Historial Reciente</h3>
+                                    <span class="text-xs bg-white border border-slate-200 px-2 py-1 rounded-md text-slate-500 shadow-sm font-mono">${state.transactions.length}</span>
                                 </div>
-                                <div class="divide-y divide-slate-100 max-h-[600px] overflow-y-auto">
-                                    ${state.transactions.length === 0 ? '<div class="p-8 text-center text-slate-400">Sin movimientos</div>' :
+                                <div class="divide-y divide-slate-50 max-h-[800px] overflow-y-auto custom-scrollbar">
+                                    ${state.transactions.length === 0 ? '<div class="p-10 text-center text-slate-400 flex flex-col items-center"><i data-lucide="ghost" class="w-10 h-10 mb-2 opacity-50"></i>Sin movimientos</div>' :
                                     state.transactions.map(t => `
-                                        <div class="p-4 hover:bg-slate-50 flex justify-between items-center group transition-colors">
+                                        <div class="p-4 hover:bg-slate-50 flex justify-between items-center group transition-all">
                                             <div class="flex items-center gap-4">
-                                                <div class="w-10 h-10 rounded-full flex items-center justify-center ${t.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}">
-                                                    <i data-lucide="${t.type === 'income' ? 'arrow-down-right' : 'arrow-up-right'}" class="w-5 h-5"></i>
+                                                <div class="w-10 h-10 rounded-full flex items-center justify-center ${t.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-50 text-red-500'} shrink-0">
+                                                    <i data-lucide="${getIconForCategory(t.category)}" class="w-5 h-5"></i>
                                                 </div>
-                                                <div>
-                                                    <p class="font-semibold text-slate-800">${t.description}</p>
-                                                    <p class="text-xs text-slate-500">${t.date} • ${t.account} • ${t.category}</p>
+                                                <div class="min-w-0">
+                                                    <p class="font-bold text-slate-800 text-sm truncate pr-2">${t.description}</p>
+                                                    <p class="text-xs text-slate-400 flex items-center gap-1">
+                                                        <span>${formatDate(t.date)}</span>
+                                                        <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                                                        <span>${t.account}</span>
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div class="text-right flex items-center gap-4">
-                                                <span class="font-bold ${t.type === 'income' ? 'text-emerald-600' : 'text-slate-700'}">
+                                            <div class="text-right flex items-center gap-3 shrink-0">
+                                                <span class="font-bold text-sm ${t.type === 'income' ? 'text-emerald-600' : 'text-slate-800'}">
                                                     ${t.type === 'income' ? '+' : '-'}$${parseFloat(t.amount).toLocaleString()}
                                                 </span>
-                                                <button onclick="app.deleteTransaction('${t.id}')" class="text-slate-300 hover:text-red-500 transition-colors md:opacity-0 group-hover:opacity-100">
+                                                <button onclick="app.deleteTransaction('${t.id}')" class="text-slate-300 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-lg transition-colors">
                                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                     `).join('')}
+                                    `).join('')}
                                 </div>
                             </div>
                         </div>
@@ -418,24 +456,26 @@
             // --- INVESTMENTS ---
             renderInvestments: (container) => {
                 container.innerHTML = `
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in pb-20">
                         <div class="lg:col-span-1">
-                            <div class="bg-white rounded-xl shadow-sm border border-purple-200 border-t-4 border-t-purple-500 p-6 sticky top-24">
-                                <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="trending-up" class="text-purple-600 w-5 h-5"></i> Comprar</h2>
-                                <div class="bg-purple-50 p-3 rounded-lg text-xs text-purple-800 mb-4">💡 Ingresa símbolo existente para calcular DCA.</div>
+                            <div class="bg-white rounded-2xl shadow-sm border border-violet-100 p-6 sticky top-24">
+                                <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="layers" class="text-violet-600 w-4 h-4"></i> Nueva Posición</h2>
+                                <div class="bg-violet-50 p-3 rounded-xl text-xs text-violet-800 mb-4 border border-violet-100">
+                                    Si ingresas un símbolo existente, se calculará el precio promedio ponderado.
+                                </div>
                                 <form onsubmit="event.preventDefault(); app.buyInvestment();" class="flex flex-col gap-4">
                                     <div class="grid grid-cols-2 gap-3">
                                         ${renderInput('Símbolo', 'text', 'inv-symbol', 'AAPL', '', 'uppercase')}
                                         ${renderInput('Nombre', 'text', 'inv-name', 'Apple')}
                                     </div>
-                                    ${renderInput('Cantidad', 'number', 'inv-qty', '10')}
-                                    ${renderInput('Precio Unitario', 'number', 'inv-price', '150.00')}
-                                    <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 shadow-md">Registrar</button>
+                                    ${renderInput('Cantidad', 'number', 'inv-qty', '10', '', 'step="any"')}
+                                    ${renderInput('Precio Unitario', 'number', 'inv-price', '150.00', '', 'step="0.01"')}
+                                    <button type="submit" class="w-full bg-violet-600 text-white py-3 rounded-xl font-bold hover:bg-violet-700 shadow-lg shadow-violet-200 transition-all mt-2">Registrar Compra</button>
                                 </form>
                             </div>
                         </div>
                         <div class="lg:col-span-2 space-y-4">
-                            ${state.investments.length === 0 ? '<div class="bg-white p-10 rounded-xl text-center text-slate-400">Sin inversiones</div>' :
+                            ${state.investments.length === 0 ? '<div class="bg-white p-16 rounded-2xl text-center text-slate-400 border border-slate-100 border-dashed"><i data-lucide="pie-chart" class="w-12 h-12 mb-3 mx-auto opacity-30"></i><p>Tu portafolio está vacío</p></div>' :
                             state.investments.map(inv => {
                                 const totalCost = inv.quantity * inv.avgPrice;
                                 const curVal = inv.quantity * inv.currentPrice;
@@ -443,87 +483,85 @@
                                 const plPercent = totalCost ? ((pl / totalCost) * 100).toFixed(2) : 0;
                                 const isPos = pl >= 0;
                                 return `
-                                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 relative hover:shadow-md transition-shadow">
-                                            <div class="flex justify-between items-center gap-4">
-                                                <div class="flex-1">
-                                                    <div class="flex items-center gap-2">
-                                                        <h3 class="text-xl font-bold text-slate-800">${inv.symbol}</h3>
-                                                        <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">${inv.name}</span>
-                                                    </div>
-                                                    <div class="mt-2 flex gap-4 text-sm text-slate-500">
-                                                        <div><span class="block text-xs uppercase font-semibold">Tenencia</span><span class="text-slate-800">${inv.quantity}</span></div>
-                                                        <div><span class="block text-xs uppercase font-semibold">PPC</span><span class="text-slate-800">$${inv.avgPrice.toFixed(2)}</span></div>
-                                                    </div>
+                                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 relative hover:shadow-md transition-shadow group">
+                                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center font-bold text-slate-700 border border-slate-100">
+                                                    ${inv.symbol.substring(0,3)}
                                                 </div>
-                                                <div class="text-right ${isPos ? 'text-emerald-600' : 'text-red-500'}">
-                                                    <div class="font-bold text-lg">${isPos ? '+' : ''}${plPercent}%</div>
-                                                    <button onclick="app.editPrice('${inv.id}')" class="font-mono text-sm font-bold border-b border-dashed border-slate-300 hover:text-blue-600">$${inv.currentPrice.toFixed(2)}</button>
+                                                <div>
+                                                    <h3 class="text-lg font-bold text-slate-800">${inv.symbol}</h3>
+                                                    <p class="text-xs text-slate-500">${inv.name}</p>
                                                 </div>
-                                                <button onclick="app.deleteInvestment('${inv.id}')" class="text-slate-300 hover:text-red-500 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                                             </div>
-                                            <div class="border-t border-slate-100 pt-3 mt-3">
-                                                <button onclick="app.getInvestmentAdvice('${inv.id}', '${inv.symbol}', ${inv.avgPrice}, ${inv.currentPrice})" id="btn-advice-${inv.id}" class="text-xs text-indigo-600 flex items-center gap-1 hover:underline font-medium">
-                                                    <i data-lucide="sparkles" class="w-3 h-3"></i> Opinión AI
-                                                </button>
-                                                <div id="advice-${inv.id}" class="hidden mt-2 bg-indigo-50 p-3 rounded-lg text-xs text-indigo-800"></div>
+                                            <div class="flex items-center gap-6">
+                                                <div class="text-right hidden sm:block">
+                                                    <p class="text-[10px] font-bold text-slate-400 uppercase">Tenencia</p>
+                                                    <p class="font-mono font-medium text-slate-700">${inv.quantity} <span class="text-xs text-slate-400">@ $${inv.avgPrice.toFixed(0)}</span></p>
+                                                </div>
+                                                <div class="text-right">
+                                                    <p class="text-[10px] font-bold text-slate-400 uppercase">Valor Hoy</p>
+                                                    <button onclick="app.editPrice('${inv.id}')" class="font-bold text-slate-900 border-b border-dashed border-slate-300 hover:text-indigo-600 hover:border-indigo-600 transition-colors">$${inv.currentPrice.toFixed(2)}</button>
+                                                </div>
+                                                <div class="text-right w-24">
+                                                    <div class="font-bold text-lg ${isPos ? 'text-emerald-600' : 'text-red-500'}">${isPos ? '+' : ''}${plPercent}%</div>
+                                                    <p class="text-xs text-slate-400">$${pl.toFixed(0)}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                     `;
+                                        <div class="border-t border-slate-50 pt-3 mt-4 flex justify-between items-center">
+                                            <button onclick="app.getInvestmentAdvice('${inv.id}', '${inv.symbol}', ${inv.avgPrice}, ${inv.currentPrice})" id="btn-advice-${inv.id}" class="text-xs text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 font-medium transition-colors flex items-center gap-1.5">
+                                                <i data-lucide="sparkles" class="w-3 h-3"></i> Análisis AI
+                                            </button>
+                                            <button onclick="app.deleteInvestment('${inv.id}')" class="text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                        </div>
+                                        <div id="advice-${inv.id}" class="hidden mt-3 bg-gradient-to-r from-indigo-50 to-violet-50 p-3 rounded-lg text-xs text-indigo-900 border border-indigo-100 leading-relaxed animate-pulse"></div>
+                                    </div>
+                                `;
                             }).join('')}
                         </div>
                     </div>
                 `;
             },
 
-            // --- ACCOUNT ACTIONS ---
+            // --- ACTIONS ---
+            // (Accounts Logic preserved)
             addAccount: async () => {
                 const name = document.getElementById('new-acc-name').value.trim();
                 if (!name) return;
                 const newAcc = await fetchAPI('/accounts', 'POST', { name, type: 'custom' });
-                if(newAcc) {
-                    state.accounts.push(newAcc);
-                    document.getElementById('new-acc-name').value = '';
-                    app.render();
-                }
+                if(newAcc) { state.accounts.push(newAcc); document.getElementById('new-acc-name').value = ''; app.render(); }
             },
-
             editAccount: async (id, oldName) => {
-                const newName = prompt("Nuevo nombre para la cuenta:", oldName);
+                const newName = prompt("Nuevo nombre:", oldName);
                 if (!newName || newName === oldName) return;
                 const updated = await fetchAPI('/accounts', 'POST', { id, name: newName });
-                if(updated) {
-                    const acc = state.accounts.find(a => a.id === id);
-                    if(acc) acc.name = newName;
-                    app.render();
-                }
+                if(updated) { state.accounts.find(a => a.id === id).name = newName; app.render(); }
             },
-
             deleteAccount: async (id) => {
-                if (!confirm('¿Eliminar cuenta?')) return;
+                if (!confirm('¿Seguro que deseas eliminar esta cuenta?')) return;
                 await fetchAPI(`/accounts?id=${id}`, 'DELETE');
                 state.accounts = state.accounts.filter(a => a.id !== id);
                 app.render();
             },
 
-            // --- OTHER ACTIONS ---
+            // (Transactions Logic preserved)
             setTransType: (type) => {
                 document.getElementById('t-type').value = type;
                 const btnExp = document.getElementById('btn-expense');
                 const btnInc = document.getElementById('btn-income');
                 if (type === 'expense') {
-                    btnExp.className = "flex-1 py-2 text-sm font-medium rounded-md bg-white text-red-600 shadow-sm transition-all";
-                    btnInc.className = "flex-1 py-2 text-sm font-medium rounded-md text-slate-500 transition-all";
+                    btnExp.className = "flex-1 py-2 text-sm font-bold rounded-lg bg-white text-red-500 shadow-sm transition-all transform scale-105";
+                    btnInc.className = "flex-1 py-2 text-sm font-bold rounded-lg text-slate-400 transition-all hover:bg-slate-200/50";
                 } else {
-                    btnExp.className = "flex-1 py-2 text-sm font-medium rounded-md text-slate-500 transition-all";
-                    btnInc.className = "flex-1 py-2 text-sm font-medium rounded-md bg-white text-emerald-600 shadow-sm transition-all";
+                    btnExp.className = "flex-1 py-2 text-sm font-bold rounded-lg text-slate-400 transition-all hover:bg-slate-200/50";
+                    btnInc.className = "flex-1 py-2 text-sm font-bold rounded-lg bg-white text-emerald-600 shadow-sm transition-all transform scale-105";
                 }
             },
-
             addTransaction: async () => {
                 const amount = document.getElementById('t-amount').value;
                 const desc = document.getElementById('t-desc').value;
                 if (!amount || !desc) return;
-                
                 const newT = await fetchAPI('/transactions', 'POST', {
                     amount: parseFloat(amount), description: desc,
                     type: document.getElementById('t-type').value,
@@ -532,32 +570,24 @@
                     date: document.getElementById('t-date').value,
                     createdAt: new Date().toISOString()
                 });
-
-                if(newT) {
-                    state.transactions.unshift(newT);
-                    document.getElementById('trans-form').reset();
-                    app.setTransType('expense');
-                    document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
-                    app.render();
-                }
+                if(newT) { state.transactions.unshift(newT); document.getElementById('trans-form').reset(); app.setTransType('expense'); document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; app.render(); }
             },
-
             deleteTransaction: async (id) => {
                 await fetchAPI(`/transactions?id=${id}`, 'DELETE');
                 state.transactions = state.transactions.filter(t => t.id !== id);
                 app.render();
             },
 
+            // (AI Magic & Scanner Logic preserved & styled)
             handleMagicEntry: async () => {
                 const text = document.getElementById('magic-input').value;
                 if (!text) return;
-                state.magicLoading = true;
-                app.render();
-                document.getElementById('magic-input').value = text;
-                document.getElementById('magic-input').focus();
+                state.magicLoading = true; app.render();
+                // Re-focus and set text
+                setTimeout(() => { document.getElementById('magic-input').value = text; document.getElementById('magic-input').focus(); }, 50);
 
                 const accNames = state.accounts.map(a => a.name).join(', ');
-                const system = `Extrae JSON: {amount, description, type, category, account, date}. Accounts available: [${accNames}]. Default: ${state.accounts[0]?.name || 'Banco'}. Date: ${new Date().toISOString().split('T')[0]}`;
+                const system = `Actúa como API. Extrae JSON: {amount (number), description (string), type (income/expense), category (Comida, Transporte, Servicios, Ocio, Salud, Sueldo, Ventas, Hogar, Educación, Otros), account (match one of: [${accNames}] or default to first), date (YYYY-MM-DD)}. Hoy es ${new Date().toISOString().split('T')[0]}.`;
                 const result = await callGemini(text, system);
 
                 try {
@@ -570,11 +600,11 @@
                     document.getElementById('t-cat').value = json.category || 'Otros';
                     document.getElementById('t-date').value = json.date || new Date().toISOString().split('T')[0];
                     document.getElementById('magic-input').value = '';
-                } catch (e) { alert('No pude entender el texto.'); }
-                state.magicLoading = false;
-                app.render();
+                } catch (e) { alert('No se pudo interpretar el texto.'); }
+                state.magicLoading = false; app.render();
             },
 
+            // (Image Logic)
             handleImageUpload: (input) => {
                 const file = input.files[0];
                 if (file) {
@@ -588,76 +618,62 @@
                     reader.readAsDataURL(file);
                 }
             },
-
             clearImage: () => {
-                state.scannedImage = null;
-                state.scannedTransactions = [];
+                state.scannedImage = null; state.scannedTransactions = [];
                 document.getElementById('scanner-upload-area').classList.remove('hidden');
                 document.getElementById('scanner-preview-area').classList.add('hidden');
                 document.getElementById('scan-results').innerHTML = '';
                 document.getElementById('scan-actions').classList.add('hidden');
             },
-
             analyzeImage: async () => {
                 if (!state.scannedImage) return;
                 const btn = document.getElementById('btn-scan');
-                btn.textContent = 'Analizando...';
-                btn.disabled = true;
-
-                const system = `Analiza imagen. JSON Array: [{description, amount, type (income/expense), date, category}].`;
-                const res = await callGemini("Extrae movimientos.", system, state.scannedImage);
+                btn.textContent = 'Analizando Recibo...'; btn.disabled = true;
+                const system = `Extrae datos de recibo a JSON Array: [{description, amount (number), type (usually expense), date (YYYY-MM-DD), category}].`;
+                const res = await callGemini("Extrae items.", system, state.scannedImage);
                 try {
                     let data = JSON.parse(res.replace(/```json/g, '').replace(/```/g, '').trim());
                     if (!Array.isArray(data)) data = [data];
                     state.scannedTransactions = data;
                     document.getElementById('scan-results').innerHTML = data.map((item, idx) => `
-                        <div class="bg-white p-2 rounded border ${item.type === 'income' ? 'border-emerald-200 bg-emerald-50' : 'border-red-100'} text-xs flex justify-between items-center shadow-sm">
-                            <div class="flex-1 min-w-0 mr-2">
-                                <div class="font-semibold truncate text-slate-700">${item.description}</div>
-                                <div class="flex gap-2 text-slate-500">
-                                    <span class="font-bold ${item.type === 'income' ? 'text-emerald-600' : 'text-red-600'}">${item.type === 'income' ? '(+)' : '(-)'} $${item.amount}</span>
-                                    <span>• ${item.category}</span>
-                                </div>
+                        <div class="bg-slate-50 p-2 rounded border border-slate-200 text-xs flex justify-between items-center">
+                            <div class="truncate mr-2 font-medium text-slate-700">${item.description}</div>
+                            <div class="flex gap-2 items-center">
+                                <span class="font-bold text-slate-900">$${item.amount}</span>
+                                <button onclick="app.importScanned(${idx})" class="p-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200"><i data-lucide="check" class="w-3 h-3"></i></button>
                             </div>
-                            <button onclick="app.importScanned(${idx})" class="p-1.5 ${item.type === 'income' ? 'bg-emerald-200 text-emerald-800' : 'bg-slate-100 text-slate-600'} rounded-md hover:opacity-80"><i data-lucide="check" class="w-3 h-3"></i></button>
-                        </div>
-                    `).join('');
+                        </div>`).join('');
                     if (data.length > 0) document.getElementById('scan-actions').classList.remove('hidden');
                     lucide.createIcons();
-                } catch (e) { console.error(e); alert('Error analizando imagen.'); }
-                btn.textContent = 'Detectar Movimientos';
-                btn.disabled = false;
+                } catch (e) { alert('Error leyendo imagen'); }
+                btn.textContent = 'Procesar Imagen'; btn.disabled = false;
             },
-
             importScanned: async (idx) => {
                 const item = state.scannedTransactions[idx];
                 const acc = document.getElementById('scanner-account').value;
                 await fetchAPI('/transactions', 'POST', {
-                    amount: parseFloat(item.amount), description: item.description, type: item.type,
+                    amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
                     category: item.category || 'Otros', account: acc, date: item.date || new Date().toISOString().split('T')[0],
                     createdAt: new Date().toISOString()
                 });
                 state.scannedTransactions.splice(idx, 1);
-                if (state.scannedTransactions.length === 0) app.clearImage();
-                else document.getElementById('scan-results').children[idx].remove(); // Simple remove from DOM
+                document.getElementById('scan-results').children[idx].remove(); // Quick UI fix
+                if(state.scannedTransactions.length === 0) app.clearImage();
             },
-
             importAllScanned: async () => {
                 const acc = document.getElementById('scanner-account').value;
                 for (const item of state.scannedTransactions) {
                     await fetchAPI('/transactions', 'POST', {
-                        amount: parseFloat(item.amount), description: item.description, type: item.type,
+                        amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
                         category: item.category || 'Otros', account: acc, date: item.date || new Date().toISOString().split('T')[0],
                         createdAt: new Date().toISOString()
                     });
                 }
                 app.clearImage();
-                // Refresh list
-                const trans = await fetchAPI('/transactions');
-                state.transactions = trans;
-                app.render();
+                const trans = await fetchAPI('/transactions'); state.transactions = trans; app.render();
             },
 
+            // (Investment Actions)
             buyInvestment: async () => {
                 const sym = document.getElementById('inv-symbol').value.toUpperCase();
                 const name = document.getElementById('inv-name').value;
@@ -667,7 +683,6 @@
 
                 const existing = state.investments.find(i => i.symbol === sym);
                 let payload = {};
-                
                 if (existing) {
                     const newQty = existing.quantity + qty;
                     const newAvg = ((existing.quantity * existing.avgPrice) + (qty * price)) / newQty;
@@ -675,62 +690,100 @@
                 } else {
                     payload = { symbol: sym, name: name || sym, quantity: qty, avgPrice: price, currentPrice: price, createdAt: new Date().toISOString() };
                 }
-
                 await fetchAPI('/investments', 'POST', payload);
-                const invs = await fetchAPI('/investments'); // Reload simple
-                state.investments = invs;
-                
-                document.getElementById('inv-qty').value = '';
-                document.getElementById('inv-price').value = '';
-                app.render();
+                const invs = await fetchAPI('/investments'); state.investments = invs;
+                document.getElementById('inv-qty').value = ''; document.getElementById('inv-price').value = ''; app.render();
             },
-
             editPrice: async (id) => {
-                const newPrice = prompt("Nuevo precio actual:");
+                const newPrice = prompt("Actualizar precio de mercado:");
                 if (newPrice && !isNaN(newPrice)) {
                     await fetchAPI('/investments', 'POST', { id, currentPrice: parseFloat(newPrice) });
-                    const invs = await fetchAPI('/investments');
-                    state.investments = invs;
-                    app.render();
+                    state.investments = await fetchAPI('/investments'); app.render();
                 }
             },
-
             deleteInvestment: async (id) => {
-                if (!confirm('¿Eliminar inversión?')) return;
+                if (!confirm('¿Eliminar posición?')) return;
                 await fetchAPI(`/investments?id=${id}`, 'DELETE');
-                state.investments = state.investments.filter(i => i.id !== id);
-                app.render();
+                state.investments = state.investments.filter(i => i.id !== id); app.render();
             },
 
+            // --- AI ANALYTICS (NUEVO PROMPT SERIO) ---
             generateAIReport: async () => {
                 state.aiLoading = true;
                 const btn = document.getElementById('btn-ai-report');
-                btn.innerHTML = '<div class="loader mr-2"></div> Analizando...';
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<div class="loader border-white border-t-transparent mr-2"></div> Analizando...';
+                
                 const stats = getStats();
-                const res = await callGemini(`Analista financiero sarcástico. Situación: ${JSON.stringify({ net: stats.totalNetWorth, flow: stats.balance })}. 3 consejos breves.`);
+                
+                // Preparar datos detallados para el prompt
+                const financialData = {
+                    balance_general: {
+                        ingresos: stats.totalIncome,
+                        gastos: stats.totalExpense,
+                        ahorro_neto: stats.balance,
+                        patrimonio: stats.totalNetWorth
+                    },
+                    gastos_por_categoria: stats.expenseByCategory
+                };
+
+                const prompt = `Analiza los siguientes datos financieros de un usuario: ${JSON.stringify(financialData)}.
+                
+                Como un Asesor Financiero Senior y serio, genera un reporte breve en formato texto plano (sin markdown negritas exageradas) con la siguiente estructura:
+                1. DIAGNÓSTICO: Una frase contundente sobre la salud financiera actual.
+                2. ANÁLISIS: Menciona qué categorías están consumiendo más recursos y si el ratio ahorro/gasto es saludable.
+                3. PLAN DE ACCIÓN: 3 consejos accionables, numerados y precisos para optimizar las finanzas la próxima semana.
+                
+                Sé directo, profesional y usa terminología financiera adecuada.`;
+
+                const res = await callGemini(prompt);
+                
                 state.aiLoading = false;
-                btn.innerHTML = 'Generar Reporte';
+                btn.innerHTML = originalText;
                 const c = document.getElementById('ai-result');
-                c.textContent = res; c.classList.remove('hidden');
+                c.textContent = res;
+                c.classList.remove('hidden');
+                c.classList.add('fade-in');
             },
 
             getInvestmentAdvice: async (id, sym, avg, curr) => {
                 const c = document.getElementById(`advice-${id}`);
+                c.classList.remove('hidden');
+                c.textContent = "Analizando mercado...";
                 const pl = ((curr - avg) / avg * 100).toFixed(2);
-                const res = await callGemini(`Analista de inversiones. Activo: ${sym}, Precio Compra: ${avg}, Precio Hoy: ${curr}, Rendimiento: ${pl}%. Opinión en 1 frase.`);
-                c.textContent = res; c.classList.remove('hidden');
+                
+                const prompt = `Actúa como Analista de Inversiones de Wall Street. Activo: ${sym}. Precio Compra: $${avg}. Precio Actual: $${curr}. Rendimiento: ${pl}%.
+                Dame una opinión de 1 sola frase seria y técnica sobre si mantener, vender o comprar más, basada en la lógica de gestión de riesgos.`;
+                
+                const res = await callGemini(prompt);
+                c.textContent = res;
+                c.classList.remove('animate-pulse');
             }
         };
 
         // Helpers
-        function renderCard(title, val1, val2, color, icon, val2Color = 'text-slate-400') {
-            return `<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 border-l-4 border-l-${color}-500"><div class="text-slate-500 text-sm font-medium mb-1 flex items-center gap-2"><i data-lucide="${icon}" class="w-4 h-4"></i> ${title}</div><div class="text-2xl font-bold text-slate-900">${val1}</div><div class="text-xs ${val2Color} mt-1">${val2}</div></div>`;
+        function renderCard(title, val1, val2, color, icon, val2Color = 'text-indigo-200') {
+            return `<div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 relative overflow-hidden group hover:shadow-md transition-all">
+                <div class="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-${color}-600"><i data-lucide="${icon}" class="w-16 h-16"></i></div>
+                <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2"><i data-lucide="${icon}" class="w-4 h-4 text-${color}-500"></i> ${title}</div>
+                <div class="text-2xl font-bold text-slate-800 tracking-tight">${val1}</div>
+                <div class="text-xs ${val2Color === 'text-indigo-200' ? 'text-slate-400' : val2Color} mt-1 font-medium">${val2}</div>
+            </div>`;
         }
         function renderInput(lbl, type, id, ph, val = '', extra = '') {
-            return `<div class="flex flex-col gap-1 w-full"><label class="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">${lbl}</label><input type="${type}" id="${id}" placeholder="${ph}" value="${val}" ${extra} class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"></div>`;
+            return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><input type="${type}" id="${id}" placeholder="${ph}" value="${val}" ${extra} class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all"></div>`;
         }
         function renderSelect(lbl, id, opts) {
-            return `<div class="flex flex-col gap-1 w-full"><label class="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">${lbl}</label><select id="${id}" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">${opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select></div>`;
+            return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><select id="${id}" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all">${opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select></div>`;
+        }
+        function getIconForCategory(cat) {
+            const map = { 'Comida': 'utensils', 'Transporte': 'car', 'Servicios': 'zap', 'Ocio': 'beer', 'Salud': 'heart', 'Sueldo': 'banknote', 'Ventas': 'shopping-bag', 'Hogar': 'home', 'Educación': 'graduation-cap' };
+            return map[cat] || 'circle-dollar-sign';
+        }
+        function formatDate(dateStr) {
+            if(!dateStr) return '';
+            const [y, m, d] = dateStr.split('-');
+            return `${d}/${m}`;
         }
 
         initApp();
