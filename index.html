@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -36,7 +36,7 @@
                     <i data-lucide="brain-circuit" class="w-8 h-8"></i>
                 </div>
                 <h1 class="text-2xl font-bold text-slate-900">Finanzas Pro <span class="text-indigo-600">AI</span></h1>
-                <p class="text-slate-400 text-sm mt-2">Intelligence for your money</p>
+                <p class="text-slate-400 text-sm mt-2">Inteligencia para tu dinero</p>
             </div>
 
             <form id="auth-form" onsubmit="event.preventDefault(); auth.handleAuth();" class="space-y-4">
@@ -45,21 +45,21 @@
                     <input type="email" id="auth-email" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                 </div>
                 <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500 uppercase ml-1">Password</label>
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1">Contraseña</label>
                     <input type="password" id="auth-password" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                 </div>
                 
                 <div id="auth-error" class="hidden p-3 bg-red-50 text-red-600 text-xs rounded-lg font-medium text-center"></div>
 
                 <button type="submit" id="btn-auth-submit" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all mt-2">
-                    Log In
+                    Iniciar Sesión
                 </button>
             </form>
 
             <div class="mt-6 text-center">
                 <p class="text-sm text-slate-500">
-                    <span id="auth-toggle-text">Don't have an account?</span>
-                    <button onclick="auth.toggleMode()" class="text-indigo-600 font-bold hover:underline ml-1" id="btn-auth-toggle">Sign Up</button>
+                    <span id="auth-toggle-text">¿No tienes cuenta?</span>
+                    <button onclick="auth.toggleMode()" class="text-indigo-600 font-bold hover:underline ml-1" id="btn-auth-toggle">Regístrate</button>
                 </p>
             </div>
         </div>
@@ -73,7 +73,9 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold text-slate-900 leading-tight tracking-tight">Finanzas Pro <span class="text-indigo-600">AI</span></h1>
-                    <p id="connection-status" class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Connecting...</p>
+                    <div class="flex items-center gap-2">
+                        <p id="connection-status" class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Conectando...</p>
+                    </div>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -82,6 +84,7 @@
                     <button onclick="app.setTab('transactions')" id="nav-transactions" class="px-4 py-2 rounded-md text-sm font-medium transition-all text-slate-500 hover:text-slate-700">Movimientos</button>
                     <button onclick="app.setTab('investments')" id="nav-investments" class="px-4 py-2 rounded-md text-sm font-medium transition-all text-slate-500 hover:text-slate-700">Inversiones</button>
                     <button onclick="app.setTab('accounts')" id="nav-accounts" class="px-4 py-2 rounded-md text-sm font-medium transition-all text-slate-500 hover:text-slate-700">Cuentas</button>
+                    <button onclick="app.setTab('settings')" id="nav-settings" class="px-4 py-2 rounded-md text-sm font-medium transition-all text-slate-500 hover:text-slate-700"><i data-lucide="settings" class="w-4 h-4"></i></button>
                 </div>
                 <button onclick="auth.logout()" class="p-2 text-slate-400 hover:text-red-500 bg-slate-50 rounded-lg hover:bg-red-50 transition-colors">
                     <i data-lucide="log-out" class="w-5 h-5"></i>
@@ -96,14 +99,15 @@
     <nav id="mobile-nav" class="hidden md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-lg border-t border-slate-200 justify-around p-3 pb-[env(safe-area-inset-bottom)] z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <button onclick="app.setTab('dashboard')" id="mob-dashboard" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="layout-dashboard" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Resumen</span></button>
         <button onclick="app.setTab('transactions')" id="mob-transactions" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="wallet" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Movs</span></button>
-        <button onclick="app.setTab('investments')" id="mob-investments" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="trending-up" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Inversión</span></button>
+        <button onclick="app.setTab('investments')" id="mob-investments" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="trending-up" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Inver</span></button>
         <button onclick="app.setTab('accounts')" id="mob-accounts" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="landmark" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Cuentas</span></button>
+        <button onclick="app.setTab('settings')" id="mob-settings" class="flex flex-col items-center text-slate-400 p-2"><i data-lucide="settings" class="w-6 h-6 mb-1"></i><span class="text-[10px] font-medium">Config</span></button>
     </nav>
 
     <script>
         // --- 1. STATE & GLOBALS ---
-        const API_URL = "https://finanzas-backend-877934393466.us-central1.run.app/api";
-        const API_URL_TEST = "http://localhost:8080/api";
+        const API_URL = "http://localhost:8080/api"
+        const API_URL_1 = "https://finanzas-backend-877934393466.us-central1.run.app/api"; 
         
         const state = {
             token: localStorage.getItem('token'),
@@ -113,13 +117,19 @@
             investments: [],
             accounts: [],
             charts: {},
+            
+            // AI State
             aiLoading: false,
+            aiReportText: null,
             magicLoading: false,
+            
             scannedTransactions: [],
-            scannedImage: null
+            scannedImage: null,
+            quota: { used: 0, limit: 15, remaining: 15, isUsingOwnKey: false, resetDate: null },
+            userSettings: { useOwnKey: false, hasKey: false }
         };
 
-        // --- 2. AUTHENTICATION MODULE (Pure API) ---
+        // --- 2. AUTHENTICATION MODULE ---
         window.auth = {
             init: () => {
                 if (state.token) {
@@ -153,9 +163,9 @@
 
             toggleMode: () => {
                 state.isRegistering = !state.isRegistering;
-                document.getElementById('auth-toggle-text').textContent = state.isRegistering ? "Already have an account?" : "Don't have an account?";
-                document.getElementById('btn-auth-toggle').textContent = state.isRegistering ? "Log In" : "Sign Up";
-                document.getElementById('btn-auth-submit').textContent = state.isRegistering ? "Create Account" : "Log In";
+                document.getElementById('auth-toggle-text').textContent = state.isRegistering ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?";
+                document.getElementById('btn-auth-toggle').textContent = state.isRegistering ? "Inicia Sesión" : "Regístrate";
+                document.getElementById('btn-auth-submit').textContent = state.isRegistering ? "Crear Cuenta" : "Iniciar Sesión";
                 document.getElementById('auth-error').classList.add('hidden');
             },
 
@@ -180,14 +190,12 @@
 
                     const data = await res.json();
 
-                    if (!res.ok) throw new Error(data.message || 'Auth failed');
+                    if (!res.ok) throw new Error(data.message || 'Error de autenticación');
 
                     if (state.isRegistering) {
-                        // Registration successful, now switch to login
-                        alert("Account created! Please log in.");
+                        alert("Cuenta creada. Por favor inicia sesión.");
                         auth.toggleMode();
                     } else {
-                        // Login successful
                         state.token = data.idToken;
                         localStorage.setItem('token', data.idToken);
                         auth.toggleUI(true);
@@ -198,7 +206,7 @@
                     errorDiv.classList.remove('hidden');
                 } finally {
                     btn.disabled = false;
-                    btn.textContent = state.isRegistering ? "Create Account" : "Log In";
+                    btn.textContent = state.isRegistering ? "Crear Cuenta" : "Iniciar Sesión";
                 }
             },
 
@@ -222,19 +230,27 @@
                     } 
                 };
                 if (body) options.body = JSON.stringify(body);
-               
+                
                 const res = await fetch(`${API_URL}${endpoint}`, options);
                 
                 if (res.status === 401) {
-                    auth.logout(); // Token expired
+                    auth.logout(); 
                     return null;
                 }
-                if (!res.ok) throw new Error('API Error');
+                if (!res.ok) {
+                    const error = new Error('API Error');
+                    error.status = res.status;
+                    error.data = await res.json().catch(() => ({}));
+                    throw error;
+                }
                 return await res.json();
             } catch (e) {
+                if (e.status === 403) throw e; 
                 console.error("API Error:", e);
-                document.getElementById('connection-status').textContent = '🔴 Offline';
-                document.getElementById('connection-status').className = 'text-[10px] font-medium text-red-500 uppercase tracking-wider';
+                if (method === 'GET' && ['/transactions','/investments'].includes(endpoint)) {
+                     document.getElementById('connection-status').textContent = '🔴 Offline';
+                     document.getElementById('connection-status').className = 'text-[10px] font-medium text-red-500 uppercase tracking-wider';
+                }
                 return null;
             }
         }
@@ -244,15 +260,19 @@
             init: async () => {
                 lucide.createIcons();
                 try {
-                    const [trans, invs, accs] = await Promise.all([
+                    const [trans, invs, accs, quota, settings] = await Promise.all([
                         fetchAPI('/transactions'),
                         fetchAPI('/investments'),
-                        fetchAPI('/accounts')
+                        fetchAPI('/accounts'),
+                        fetchAPI('/ai/quota'),
+                        fetchAPI('/settings')
                     ]);
 
                     if (trans) state.transactions = trans;
                     if (invs) state.investments = invs;
                     if (accs) state.accounts = accs;
+                    if (quota) state.quota = quota;
+                    if (settings) state.userSettings = settings;
 
                     document.getElementById('connection-status').textContent = '🟢 Online';
                     document.getElementById('connection-status').className = 'text-[10px] font-medium text-emerald-600 uppercase tracking-wider';
@@ -268,7 +288,7 @@
             },
 
             render: () => {
-                const navIds = ['dashboard', 'transactions', 'investments', 'accounts'];
+                const navIds = ['dashboard', 'transactions', 'investments', 'accounts', 'settings'];
                 navIds.forEach(id => {
                     const deskBtn = document.getElementById(`nav-${id}`);
                     const mobBtn = document.getElementById(`mob-${id}`);
@@ -285,6 +305,8 @@
                 });
 
                 const content = document.getElementById('app-content');
+                
+                // Cleanup charts
                 if (state.charts.cashFlow) { state.charts.cashFlow.destroy(); state.charts.cashFlow = null; }
                 if (state.charts.accounts) { state.charts.accounts.destroy(); state.charts.accounts = null; }
 
@@ -292,8 +314,31 @@
                 else if (state.activeTab === 'transactions') app.renderTransactions(content);
                 else if (state.activeTab === 'investments') app.renderInvestments(content);
                 else if (state.activeTab === 'accounts') app.renderAccounts(content);
+                else if (state.activeTab === 'settings') app.renderSettings(content);
 
                 lucide.createIcons();
+            },
+
+            // --- QUOTA HELPERS ---
+            updateQuota: async () => {
+                // Fetch fresh quota from backend (Backend recalculates based on logs)
+                const q = await fetchAPI('/ai/quota');
+                if (q) {
+                    state.quota = q;
+                    // Solo renderizamos si estamos en una vista que muestra la cuota
+                    if(document.getElementById('ai-result') || document.getElementById('scanner-upload-area')) {
+                        app.render();
+                    }
+                }
+            },
+
+            renderQuotaBadge: () => {
+                const q = state.quota;
+                if (q.isUsingOwnKey) {
+                    return `<span class="inline-flex items-center gap-1 bg-gradient-to-r from-amber-200 to-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full border border-yellow-500/20 shadow-sm"><i data-lucide="zap" class="w-3 h-3 fill-yellow-900"></i> PRO</span>`;
+                }
+                const color = q.remaining > 5 ? 'bg-emerald-100 text-emerald-700' : (q.remaining > 0 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700');
+                return `<span class="inline-flex items-center gap-1 ${color} text-[10px] font-bold px-2 py-0.5 rounded-full border border-current opacity-80"><i data-lucide="battery-charging" class="w-3 h-3"></i> ${q.remaining}/${q.limit}</span>`;
             },
 
             // --- DASHBOARD ---
@@ -308,30 +353,39 @@
                             <div class="absolute top-0 right-0 p-8 opacity-10"><i data-lucide="brain-circuit" class="w-32 h-32"></i></div>
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
                                 <div>
-                                    <h2 class="text-2xl font-bold flex items-center gap-2">AI Financial Advisor</h2>
-                                    <p class="text-indigo-200 mt-1 text-sm max-w-md">Deep analysis of your spending patterns and financial health.</p>
+                                    <h2 class="text-2xl font-bold flex items-center gap-2">Asesor Financiero AI</h2>
+                                    <p class="text-indigo-200 mt-1 text-sm max-w-md">Análisis profundo de tus patrones de gasto y salud financiera.</p>
+                                    <div class="mt-2">${app.renderQuotaBadge()}</div>
                                 </div>
-                                <button onclick="app.generateAIReport()" id="btn-ai-report" class="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 px-5 py-2.5 rounded-xl font-medium shadow-lg text-sm transition-all flex items-center gap-2 group">
-                                    ${state.aiLoading ? '<div class="loader border-white border-t-transparent mr-2"></div> Analyzing...' : '<i data-lucide="sparkles" class="w-4 h-4 text-yellow-300 group-hover:rotate-12 transition-transform"></i> Generate Report'}
+                                <button onclick="app.generateAIReport()" id="btn-ai-report" ${state.aiLoading ? 'disabled' : ''} class="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 px-5 py-2.5 rounded-xl font-medium shadow-lg text-sm transition-all flex items-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed">
+                                    ${state.aiLoading ? '<div class="loader border-white border-t-transparent mr-2"></div> Analizando...' : '<i data-lucide="sparkles" class="w-4 h-4 text-yellow-300 group-hover:rotate-12 transition-transform"></i> Generar Reporte'}
                                 </button>
                             </div>
-                            <div id="ai-result" class="mt-6 hidden bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 text-sm whitespace-pre-line leading-relaxed font-light tracking-wide text-indigo-50"></div>
+                            
+                            ${state.aiReportText ? `
+                                <div id="ai-result" class="mt-6 bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 text-sm whitespace-pre-line leading-relaxed font-light tracking-wide text-indigo-50 relative fade-in">
+                                    <button onclick="app.clearAIReport()" class="absolute top-3 right-3 text-indigo-300 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors" title="Cerrar Reporte">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                    </button>
+                                    ${state.aiReportText}
+                                </div>
+                            ` : ''}
                         </div>
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                            ${renderCard('Net Worth', `$${stats.totalNetWorth.toLocaleString()}`, 'Total Assets', 'indigo', 'wallet')}
-                            ${renderCard('Cash Flow', `$${stats.balance.toLocaleString()}`, `Income: $${stats.totalIncome.toLocaleString()}`, 'emerald', 'activity')}
-                            ${renderCard('Investments', `$${stats.investmentValue.toLocaleString()}`, `${pl >= 0 ? '+' : ''}$${pl.toLocaleString()} (P/L)`, 'violet', 'trending-up', pl >= 0 ? 'text-emerald-600' : 'text-red-500')}
-                            ${renderCard('Savings Rate', `${savingsRate}%`, 'Monthly Rate', 'blue', 'piggy-bank')}
+                            ${renderCard('Patrimonio', `$${stats.totalNetWorth.toLocaleString()}`, 'Activos Totales', 'indigo', 'wallet')}
+                            ${renderCard('Flujo', `$${stats.balance.toLocaleString()}`, `Ingresos: $${stats.totalIncome.toLocaleString()}`, 'emerald', 'activity')}
+                            ${renderCard('Inversiones', `$${stats.investmentValue.toLocaleString()}`, `${pl >= 0 ? '+' : ''}$${pl.toLocaleString()} (G/P)`, 'violet', 'trending-up', pl >= 0 ? 'text-emerald-600' : 'text-red-500')}
+                            ${renderCard('Ahorro', `${savingsRate}%`, 'Tasa Mensual', 'blue', 'piggy-bank')}
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
-                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Cash Flow</h3>
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Flujo de Caja</h3>
                                 <div class="relative h-60 w-full"><canvas id="chartCashFlow"></canvas></div>
                             </div>
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
-                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Asset Allocation</h3>
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Asignación de Activos</h3>
                                 <div class="relative h-60 w-full flex justify-center"><canvas id="chartAccounts"></canvas></div>
                             </div>
                         </div>
@@ -343,7 +397,7 @@
                     if(ctxCF) {
                         state.charts.cashFlow = new Chart(ctxCF.getContext('2d'), {
                             type: 'bar',
-                            data: { labels: ['Income', 'Expenses'], datasets: [{ data: [stats.totalIncome, stats.totalExpense], backgroundColor: ['#10b981', '#ef4444'], borderRadius: 8, barThickness: 50 }] },
+                            data: { labels: ['Ingresos', 'Gastos'], datasets: [{ data: [stats.totalIncome, stats.totalExpense], backgroundColor: ['#10b981', '#ef4444'], borderRadius: 8, barThickness: 50 }] },
                             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { display: false } }, x: { grid: { display: false } } } }
                         });
                     }
@@ -356,23 +410,111 @@
                             options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8 } } } }
                         });
                     } else if (ctxAcc) {
-                        ctxAcc.parentNode.innerHTML = '<div class="h-full flex flex-col items-center justify-center text-slate-400 text-xs"><i data-lucide="bar-chart-2" class="w-8 h-8 mb-2 opacity-50"></i>No Data</div>';
+                        ctxAcc.parentNode.innerHTML = '<div class="h-full flex flex-col items-center justify-center text-slate-400 text-xs"><i data-lucide="bar-chart-2" class="w-8 h-8 mb-2 opacity-50"></i>Sin Datos</div>';
                     }
                 }, 0);
             },
 
+            // --- SETTINGS (Tab) ---
+            renderSettings: (container) => {
+                const s = state.userSettings;
+                const q = state.quota;
+                const resetDate = q.resetDate ? new Date(q.resetDate).toLocaleDateString() + ' ' + new Date(q.resetDate).toLocaleTimeString() : 'N/A';
+
+                container.innerHTML = `
+                    <div class="max-w-xl mx-auto space-y-6 fade-in pb-20">
+                        <h2 class="text-2xl font-bold text-slate-800">Configuración</h2>
+                        
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="zap" class="w-5 h-5 text-yellow-500"></i> Uso de IA</h3>
+                            
+                            ${q.isUsingOwnKey ? 
+                                `<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center gap-3">
+                                    <div class="bg-yellow-100 p-2 rounded-full text-yellow-600"><i data-lucide="crown" class="w-6 h-6"></i></div>
+                                    <div>
+                                        <p class="font-bold text-yellow-800">Modo Pro Activo</p>
+                                        <p class="text-xs text-yellow-700">Usando tu propia API Key. Sin límites.</p>
+                                    </div>
+                                </div>` 
+                                : 
+                                `<div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-slate-500">Créditos Semanales</span>
+                                        <span class="font-bold text-indigo-600">${q.remaining} / ${q.limit}</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 mb-2 overflow-hidden">
+                                        <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: ${(q.used / q.limit) * 100}%"></div>
+                                    </div>
+                                    <p class="text-xs text-slate-400">Se renueva el: ${resetDate}</p>
+                                </div>`
+                            }
+                        </div>
+
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="key" class="w-5 h-5 text-indigo-500"></i> Gemini API Key</h3>
+                            <p class="text-sm text-slate-500 mb-6">Usa tu propia API Key de Google Gemini para eliminar los límites semanales.</p>
+
+                            <form onsubmit="event.preventDefault(); app.saveSettings();" class="space-y-4">
+                                <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                    <span class="text-sm font-medium text-slate-700">Usar mi propia Key</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="set-useKey" class="sr-only peer" ${s.useOwnKey ? 'checked' : ''} onchange="document.getElementById('key-input-group').classList.toggle('opacity-50', !this.checked)">
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                    </label>
+                                </div>
+
+                                <div id="key-input-group" class="${s.useOwnKey ? '' : 'opacity-50'} transition-opacity">
+                                    <div class="relative">
+                                        <input type="password" id="set-apiKey" placeholder="${s.hasKey ? '••••••••••••••••' : 'Pega tu API Key aquí'}" class="w-full p-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all pr-10">
+                                        <div class="absolute right-3 top-3 text-slate-400">
+                                            ${s.hasKey ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-500"></i>' : '<i data-lucide="lock" class="w-5 h-5"></i>'}
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 mt-1 ml-1">La Key se cifra de forma segura. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-indigo-500 hover:underline">Consigue una aquí</a></p>
+                                </div>
+
+                                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all mt-2">Guardar Cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            },
+
+            saveSettings: async () => {
+                const useOwnKey = document.getElementById('set-useKey').checked;
+                const apiKey = document.getElementById('set-apiKey').value;
+                
+                const body = { useOwnKey };
+                if (apiKey && !apiKey.startsWith('•••')) {
+                    body.geminiApiKey = apiKey;
+                }
+
+                try {
+                    await fetchAPI('/settings', 'POST', body);
+                    // Fetch Quota again because switching keys changes the limit logic
+                    await app.updateQuota();
+                    const s = await fetchAPI('/settings');
+                    state.userSettings = s;
+                    alert("Configuración guardada.");
+                    app.renderSettings(document.getElementById('app-content'));
+                } catch (e) {
+                    alert("Error al guardar.");
+                }
+            },
+
+            // --- ACCOUNTS & TRANSACTIONS ---
             renderAccounts: (container) => {
                 container.innerHTML = `
                     <div class="max-w-3xl mx-auto space-y-6 fade-in pb-20">
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                            <h2 class="text-lg font-bold text-slate-800 mb-4">Add Account</h2>
+                            <h2 class="text-lg font-bold text-slate-800 mb-4">Agregar Cuenta</h2>
                             <form onsubmit="event.preventDefault(); app.addAccount();" class="flex gap-3">
-                                <input type="text" id="new-acc-name" placeholder="Ex: Crypto Wallet" class="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-medium hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all">Create</button>
+                                <input type="text" id="new-acc-name" placeholder="Ej: Billetera Crypto" class="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-medium hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all">Crear</button>
                             </form>
                         </div>
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                            <div class="p-5 border-b border-slate-100 bg-slate-50/50"><h3 class="font-bold text-slate-700 text-sm uppercase tracking-wide">My Accounts</h3></div>
+                            <div class="p-5 border-b border-slate-100 bg-slate-50/50"><h3 class="font-bold text-slate-700 text-sm uppercase tracking-wide">Mis Cuentas</h3></div>
                             <div class="divide-y divide-slate-100">
                                 ${state.accounts.map(acc => `
                                     <div class="p-5 flex justify-between items-center hover:bg-slate-50 transition-colors group">
@@ -396,46 +538,49 @@
                         <div class="lg:col-span-1 space-y-4">
                             <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-5 relative overflow-hidden group">
                                 <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                <h2 class="text-sm font-bold text-emerald-900 mb-3 flex items-center gap-2 relative z-10"><i data-lucide="scan-line" class="w-4 h-4"></i> AI Scanner</h2>
+                                <div class="flex justify-between items-start relative z-10 mb-3">
+                                    <h2 class="text-sm font-bold text-emerald-900 flex items-center gap-2"><i data-lucide="scan-line" class="w-4 h-4"></i> Escáner AI</h2>
+                                    ${app.renderQuotaBadge()}
+                                </div>
                                 <div class="mb-3 relative z-10"><select id="scanner-account" class="w-full p-2 text-sm bg-emerald-50/50 border border-emerald-100 rounded-lg text-emerald-800">${accountOptions}</select></div>
                                 <div id="scanner-upload-area" class="border-2 border-dashed border-emerald-200 rounded-xl p-6 text-center hover:bg-emerald-50/30 transition-colors relative cursor-pointer bg-white">
                                     <input type="file" accept="image/*" onchange="app.handleImageUpload(this)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
                                     <div class="bg-emerald-100 w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2 text-emerald-600"><i data-lucide="camera" class="w-5 h-5"></i></div>
-                                    <p class="text-xs text-emerald-700 font-medium">Receipt Photo</p>
+                                    <p class="text-xs text-emerald-700 font-medium">Foto de Recibo</p>
                                 </div>
                                 <div id="scanner-preview-area" class="hidden space-y-3 relative z-10">
                                     <div class="relative rounded-lg overflow-hidden border border-emerald-100 h-32 bg-slate-50">
                                         <img id="img-preview" class="w-full h-full object-contain">
                                         <button onclick="app.clearImage()" class="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-red-500 backdrop-blur-sm"><i data-lucide="x" class="w-3 h-3"></i></button>
                                     </div>
-                                    <button onclick="app.analyzeImage()" id="btn-scan" class="w-full bg-emerald-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-200 transition-all">Process Image</button>
-                                    <div id="scan-actions" class="hidden flex gap-2"><button onclick="app.importAllScanned()" class="flex-1 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-xs font-bold border border-emerald-200 hover:bg-emerald-100">Save All</button></div>
+                                    <button onclick="app.analyzeImage()" id="btn-scan" class="w-full bg-emerald-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-200 transition-all">Procesar Imagen</button>
+                                    <div id="scan-actions" class="hidden flex gap-2"><button onclick="app.importAllScanned()" class="flex-1 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-xs font-bold border border-emerald-200 hover:bg-emerald-100">Guardar Todo</button></div>
                                     <div id="scan-results" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar"></div>
                                 </div>
                             </div>
 
                             <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-5 relative overflow-hidden">
-                                <h2 class="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-500"></i> Smart Entry</h2>
-                                <textarea id="magic-input" placeholder="Ex: Lunch at McDonald's $15 with debit card" class="w-full p-3 text-sm bg-indigo-50/30 border border-indigo-100 rounded-xl focus:ring-2 focus:ring-indigo-500 resize-none h-20 mb-3 transition-all"></textarea>
-                                <button onclick="app.handleMagicEntry()" id="btn-magic" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all">${state.magicLoading ? 'Interpreting...' : 'Auto-Fill'}</button>
+                                <h2 class="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-500"></i> Entrada Mágica</h2>
+                                <textarea id="magic-input" placeholder="Ej: Almuerzo en McDonald's $15 con tarjeta de débito" class="w-full p-3 text-sm bg-indigo-50/30 border border-indigo-100 rounded-xl focus:ring-2 focus:ring-indigo-500 resize-none h-20 mb-3 transition-all"></textarea>
+                                <button onclick="app.handleMagicEntry()" id="btn-magic" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all">${state.magicLoading ? 'Interpretando...' : 'Auto-Completar'}</button>
                             </div>
 
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sticky top-24">
-                                <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">Manual Entry</h2>
+                                <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">Entrada Manual</h2>
                                 <form id="trans-form" onsubmit="event.preventDefault(); app.addTransaction();" class="flex flex-col gap-4">
                                     <div class="flex bg-slate-100 p-1 rounded-xl">
-                                        <button type="button" onclick="app.setTransType('expense')" id="btn-expense" class="flex-1 py-2 text-sm font-bold rounded-lg bg-white text-red-500 shadow-sm transition-all">Expense</button>
-                                        <button type="button" onclick="app.setTransType('income')" id="btn-income" class="flex-1 py-2 text-sm font-bold rounded-lg text-slate-400 transition-all">Income</button>
+                                        <button type="button" onclick="app.setTransType('expense')" id="btn-expense" class="flex-1 py-2 text-sm font-bold rounded-lg bg-white text-red-500 shadow-sm transition-all">Gasto</button>
+                                        <button type="button" onclick="app.setTransType('income')" id="btn-income" class="flex-1 py-2 text-sm font-bold rounded-lg text-slate-400 transition-all">Ingreso</button>
                                     </div>
                                     <input type="hidden" id="t-type" value="expense">
-                                    ${renderInput('Amount', 'number', 't-amount', '0.00', '', 'step="0.01"')}
-                                    ${renderInput('Description', 'text', 't-desc', 'Ex: Grocery Store')}
+                                    ${renderInput('Monto', 'number', 't-amount', '0.00', '', 'step="0.01"')}
+                                    ${renderInput('Descripción', 'text', 't-desc', 'Ej: Supermercado')}
                                     <div class="grid grid-cols-2 gap-3">
-                                        <div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Account</label><select id="t-account" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm">${accountOptions}</select></div>
-                                        ${renderSelect('Category', 't-cat', ['Food', 'Transport', 'Services', 'Leisure', 'Health', 'Salary', 'Sales', 'Home', 'Education', 'Other'])}
+                                        <div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Cuenta</label><select id="t-account" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm">${accountOptions}</select></div>
+                                        ${renderSelect('Categoría', 't-cat', ['Comida', 'Transporte', 'Servicios', 'Ocio', 'Salud', 'Sueldo', 'Ventas', 'Hogar', 'Educación', 'Otros'])}
                                     </div>
-                                    ${renderInput('Date', 'date', 't-date', '', new Date().toISOString().split('T')[0])}
-                                    <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all mt-2">Save Transaction</button>
+                                    ${renderInput('Fecha', 'date', 't-date', '', new Date().toISOString().split('T')[0])}
+                                    <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all mt-2">Guardar</button>
                                 </form>
                             </div>
                         </div>
@@ -443,11 +588,11 @@
                         <div class="lg:col-span-2">
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full min-h-[500px]">
                                 <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center sticky top-0 backdrop-blur-sm z-10">
-                                    <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wide">Recent History</h3>
+                                    <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wide">Historial Reciente</h3>
                                     <span class="text-xs bg-white border border-slate-200 px-2 py-1 rounded-md text-slate-500 font-mono">${state.transactions.length}</span>
                                 </div>
                                 <div class="divide-y divide-slate-50 max-h-[800px] overflow-y-auto custom-scrollbar">
-                                    ${state.transactions.length === 0 ? '<div class="p-10 text-center text-slate-400 flex flex-col items-center"><i data-lucide="ghost" class="w-10 h-10 mb-2 opacity-50"></i>No transactions</div>' : state.transactions.map(t => `
+                                    ${state.transactions.length === 0 ? '<div class="p-10 text-center text-slate-400 flex flex-col items-center"><i data-lucide="ghost" class="w-10 h-10 mb-2 opacity-50"></i>Sin movimientos</div>' : state.transactions.map(t => `
                                         <div class="p-4 hover:bg-slate-50 flex justify-between items-center group transition-all">
                                             <div class="flex items-center gap-4">
                                                 <div class="w-10 h-10 rounded-full flex items-center justify-center ${t.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-50 text-red-500'} shrink-0"><i data-lucide="${getIconForCategory(t.category)}" class="w-5 h-5"></i></div>
@@ -472,20 +617,20 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in pb-20">
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-2xl shadow-sm border border-violet-100 p-6 sticky top-24">
-                                <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="layers" class="text-violet-600 w-4 h-4"></i> New Position</h2>
+                                <h2 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="layers" class="text-violet-600 w-4 h-4"></i> Nueva Posición</h2>
                                 <form onsubmit="event.preventDefault(); app.buyInvestment();" class="flex flex-col gap-4">
                                     <div class="grid grid-cols-2 gap-3">
-                                        ${renderInput('Symbol', 'text', 'inv-symbol', 'AAPL', '', 'uppercase')}
-                                        ${renderInput('Name', 'text', 'inv-name', 'Apple')}
+                                        ${renderInput('Símbolo', 'text', 'inv-symbol', 'AAPL', '', 'uppercase')}
+                                        ${renderInput('Nombre', 'text', 'inv-name', 'Apple')}
                                     </div>
-                                    ${renderInput('Quantity', 'number', 'inv-qty', '10', '', 'step="any"')}
-                                    ${renderInput('Unit Price', 'number', 'inv-price', '150.00', '', 'step="0.01"')}
-                                    <button type="submit" class="w-full bg-violet-600 text-white py-3 rounded-xl font-bold hover:bg-violet-700 shadow-lg shadow-violet-200 transition-all mt-2">Add Position</button>
+                                    ${renderInput('Cantidad', 'number', 'inv-qty', '10', '', 'step="any"')}
+                                    ${renderInput('Precio Unit.', 'number', 'inv-price', '150.00', '', 'step="0.01"')}
+                                    <button type="submit" class="w-full bg-violet-600 text-white py-3 rounded-xl font-bold hover:bg-violet-700 shadow-lg shadow-violet-200 transition-all mt-2">Agregar</button>
                                 </form>
                             </div>
                         </div>
                         <div class="lg:col-span-2 space-y-4">
-                            ${state.investments.length === 0 ? '<div class="bg-white p-16 rounded-2xl text-center text-slate-400 border border-slate-100 border-dashed"><i data-lucide="pie-chart" class="w-12 h-12 mb-3 mx-auto opacity-30"></i><p>Portfolio empty</p></div>' : state.investments.map(inv => {
+                            ${state.investments.length === 0 ? '<div class="bg-white p-16 rounded-2xl text-center text-slate-400 border border-slate-100 border-dashed"><i data-lucide="pie-chart" class="w-12 h-12 mb-3 mx-auto opacity-30"></i><p>Portafolio vacío</p></div>' : state.investments.map(inv => {
                                 const totalCost = inv.quantity * inv.avgPrice;
                                 const curVal = inv.quantity * inv.currentPrice;
                                 const pl = curVal - totalCost;
@@ -499,13 +644,13 @@
                                                 <div><h3 class="text-lg font-bold text-slate-800">${inv.symbol}</h3><p class="text-xs text-slate-500">${inv.name}</p></div>
                                             </div>
                                             <div class="flex items-center gap-6">
-                                                <div class="text-right hidden sm:block"><p class="text-[10px] font-bold text-slate-400 uppercase">Holdings</p><p class="font-mono font-medium text-slate-700">${inv.quantity} <span class="text-xs text-slate-400">@ $${inv.avgPrice.toFixed(0)}</span></p></div>
-                                                <div class="text-right"><p class="text-[10px] font-bold text-slate-400 uppercase">Price</p><button onclick="app.editPrice('${inv.id}')" class="font-bold text-slate-900 border-b border-dashed border-slate-300 hover:text-indigo-600 hover:border-indigo-600 transition-colors">$${inv.currentPrice.toFixed(2)}</button></div>
+                                                <div class="text-right hidden sm:block"><p class="text-[10px] font-bold text-slate-400 uppercase">Tenencia</p><p class="font-mono font-medium text-slate-700">${inv.quantity} <span class="text-xs text-slate-400">@ $${inv.avgPrice.toFixed(0)}</span></p></div>
+                                                <div class="text-right"><p class="text-[10px] font-bold text-slate-400 uppercase">Precio</p><button onclick="app.editPrice('${inv.id}')" class="font-bold text-slate-900 border-b border-dashed border-slate-300 hover:text-indigo-600 hover:border-indigo-600 transition-colors">$${inv.currentPrice.toFixed(2)}</button></div>
                                                 <div class="text-right w-24"><div class="font-bold text-lg ${isPos ? 'text-emerald-600' : 'text-red-500'}">${isPos ? '+' : ''}${plPercent}%</div><p class="text-xs text-slate-400">$${pl.toFixed(0)}</p></div>
                                             </div>
                                         </div>
                                         <div class="border-t border-slate-50 pt-3 mt-4 flex justify-between items-center">
-                                            <button onclick="app.getInvestmentAdvice('${inv.id}', '${inv.symbol}', ${inv.avgPrice}, ${inv.currentPrice})" id="btn-advice-${inv.id}" class="text-xs text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 font-medium transition-colors flex items-center gap-1.5"><i data-lucide="sparkles" class="w-3 h-3"></i> AI Analysis</button>
+                                            <button onclick="app.getInvestmentAdvice('${inv.id}', '${inv.symbol}', ${inv.avgPrice}, ${inv.currentPrice})" id="btn-advice-${inv.id}" class="text-xs text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 font-medium transition-colors flex items-center gap-1.5"><i data-lucide="sparkles" class="w-3 h-3"></i> Análisis AI</button>
                                             <button onclick="app.deleteInvestment('${inv.id}')" class="text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                                         </div>
                                         <div id="advice-${inv.id}" class="hidden mt-3 bg-gradient-to-r from-indigo-50 to-violet-50 p-3 rounded-lg text-xs text-indigo-900 border border-indigo-100 leading-relaxed animate-pulse"></div>
@@ -515,7 +660,7 @@
                     </div>`;
             },
 
-            // --- FUNCTIONALITY (Pure API calls) ---
+            // --- FUNCTIONALITY ---
             addAccount: async () => {
                 const name = document.getElementById('new-acc-name').value.trim();
                 if (!name) return;
@@ -523,7 +668,7 @@
                 if(newAcc) { state.accounts.push(newAcc); app.render(); }
             },
             deleteAccount: async (id) => {
-                if (!confirm('Delete account?')) return;
+                if (!confirm('¿Eliminar cuenta?')) return;
                 await fetchAPI(`/accounts?id=${id}`, 'DELETE');
                 state.accounts = state.accounts.filter(a => a.id !== id); app.render();
             },
@@ -558,73 +703,91 @@
                 state.transactions = state.transactions.filter(t => t.id !== id); app.render();
             },
             
-            // --- AI & MAGIC (Wrapper for fetchAPI) ---
+            // --- AI & MAGIC ---
             callGemini: async (prompt, systemInstruction = "", imageBase64 = null) => {
                 try {
                     let cleanBase64 = null;
                     if (imageBase64) cleanBase64 = imageBase64.split(',')[1]; 
                     const data = await fetchAPI('/ai/generate', 'POST', { prompt, systemInstruction, imageBase64: cleanBase64 });
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
-                } catch (error) { return null; }
+                    
+                    // UPDATE QUOTA FROM SERVER (SOURCE OF TRUTH)
+                    await app.updateQuota();
+                    
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No se generó respuesta.";
+                } catch (error) { 
+                    if (error.status === 403) {
+                         alert("⚠️ Límite de IA alcanzado.\n\nHas usado tus 15 peticiones gratuitas. Configura tu propia API Key de Gemini en Configuración.");
+                         app.setTab('settings');
+                    }
+                    return null; 
+                }
             },
+            
+            // --- GENERATE REPORT ---
+            generateAIReport: async () => {
+                state.aiLoading = true;
+                // Render loading state
+                app.renderDashboard(document.getElementById('app-content'));
+                // IMPORTANT: Re-render icons so the spinner appears
+                lucide.createIcons();
+                
+                try {
+                    const stats = getStats();
+                    const financialData = { balance: { income: stats.totalIncome, expenses: stats.totalExpense, net: stats.balance, equity: stats.totalNetWorth }, expenses_by_cat: stats.expenseByCategory };
+                    
+                    const prompt = `Analiza: ${JSON.stringify(financialData)}. Actúa como Asesor Financiero Senior. Genera un reporte en texto plano: 1. DIAGNÓSTICO (Una frase contundente). 2. ANÁLISIS (Patrones de gasto). 3. PLAN DE ACCIÓN (3 pasos numerados para la próxima semana). Tono profesional. RESPONDE SIEMPRE EN ESPAÑOL.`;
+                    
+                    const res = await app.callGemini(prompt);
+                    
+                    if(res) {
+                        state.aiReportText = res;
+                    }
+                } finally {
+                    state.aiLoading = false;
+                    // Render final state (button normal again)
+                    app.renderDashboard(document.getElementById('app-content'));
+                    // IMPORTANT: Re-render icons so the sparkle icon appears again
+                    lucide.createIcons();
+                }
+            },
+
+            clearAIReport: () => {
+                state.aiReportText = null;
+                app.renderDashboard(document.getElementById('app-content'));
+                lucide.createIcons();
+            },
+
             handleMagicEntry: async () => {
                 const text = document.getElementById('magic-input').value;
                 if (!text) return;
                 state.magicLoading = true; app.render();
                 setTimeout(() => { document.getElementById('magic-input').value = text; document.getElementById('magic-input').focus(); }, 50);
 
-                const accNames = state.accounts.map(a => a.name).join(', ');
-                const system = `
-                    Actúa como una API de contabilidad inteligente. Tu tarea es extraer datos de la imagen de un comprobante financiero y devolverlos EXCLUSIVAMENTE en formato JSON Array.
-                    Reglas de Análisis:
-                    1. Detecta si es INGRESO (income) o GASTO (expense).
-                      - GASTO: Tickets de supermercado, facturas, comprobantes de pago enviado, débitos.
-                      - INGRESO: Comprobantes de transferencia RECIBIDA, depósitos bancarios, avisos de sueldo/nómina.
-                    2. Extrae los siguientes campos para cada ítem detectado:
-                      - "description": Nombre del comercio o concepto breve.
-                      - "amount": Número decimal (solo el valor, sin símbolos de moneda).
-                      - "type": "income" o "expense".
-                      - "date": Formato YYYY-MM-DD. Si no hay año, asume el actual, today is ${new date().toisostring().split('t')[0]}..
-                      - "category": Una de estas: [Comida, Transporte, Servicios, Ocio, Salud, Sueldo, Ventas, Hogar, Educación, Otros].
-
-                    Ejemplo de salida:
-                    [{"description": "Sueldo Mensual", "amount": 1500.00, "type": "income", "date": "2024-05-01", "category": "Sueldo"}]
-                `
+                const system = `Actúa como API. Devuelve JSON Array. Reglas: Detecta INGRESO/GASTO. Extrae: description, amount, type (income/expense), date (YYYY-MM-DD), category (Comida, Transporte, Servicios, Ocio, Salud, Sueldo, Ventas, Hogar, Educación, Otros). Hoy es ${new Date().toISOString().split('T')[0]}.`;
                 try {
-                    // Limpieza robusta del JSON por si la IA añade texto extra
-                    let cleanRes = res.replace(/```json/g, '').replace(/```/g, '').trim();
-                    // A veces la IA pone texto antes del corchete, buscamos el primer '['
-                      const firstBracket = cleanRes.indexOf('[');
-                      const lastBracket = cleanRes.lastIndexOf(']');
-                      if (firstBracket !== -1 && lastBracket !== -1) {
-                          cleanRes = cleanRes.substring(firstBracket, lastBracket + 1);
-                      }
-
-                      let data = JSON.parse(cleanRes);
-                      if (!Array.isArray(data)) data = [data];
-                      state.scannedTransactions = data;
-                      document.getElementById('scan-results').innerHTML = data.map((item, idx) => `
-                          <div class="bg-slate-50 p-2 rounded border border-slate-200 text-xs flex justify-between items-center mb-1">
-                              <div class="overflow-hidden">
-                                  <div class="truncate font-medium text-slate-700">${item.description}</div>
-                                  <div class="text-[10px] text-slate-400 uppercase flex gap-1 items-center">
-                                      <span class="${item.type === 'income' ? 'text-emerald-600 bg-emerald-50 px-1 rounded' : 'text-red-500 bg-red-50 px-1 rounded'}">${item.type === 'income' ? 'Ingreso' : 'Gasto'}</span>
-                                      <span>• ${item.category}</span>
-                                  </div>
-                              </div>
-                              <div class="flex gap-2 items-center shrink-0">
-                                  <span class="font-bold text-slate-900">$${item.amount}</span>
-                                  <button onclick="app.importScanned(${idx})" class="p-1 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition-colors"><i data-lucide="check" class="w-4 h-4"></i></button>
-                              </div>
-                          </div>`).join('');
-                      if (data.length > 0) document.getElementById('scan-actions').classList.remove('hidden');
-                      lucide.createIcons();
-                  } catch (e) { 
-                      console.error(e);
-                      alert('No se pudo leer el comprobante. Intenta con una imagen más clara.'); 
-                  }
-                btn.textContent = 'Procesar Imagen'; 
-                btn.disabled = false;
+                    const res = await app.callGemini(text, system);
+                    if (res) {
+                         let cleanRes = res.replace(/```json/g, '').replace(/```/g, '').trim();
+                         const firstBracket = cleanRes.indexOf('[');
+                         const lastBracket = cleanRes.lastIndexOf(']');
+                         if (firstBracket !== -1 && lastBracket !== -1) cleanRes = cleanRes.substring(firstBracket, lastBracket + 1);
+                         
+                         let data = JSON.parse(cleanRes);
+                         if (!Array.isArray(data)) data = [data];
+                         
+                         for (const item of data) {
+                            const newT = await fetchAPI('/transactions', 'POST', {
+                                amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
+                                category: item.category || 'Otros', account: state.accounts[0]?.name || 'Efectivo', date: item.date || new Date().toISOString().split('T')[0],
+                                createdAt: new Date().toISOString()
+                            });
+                            if(newT) state.transactions.unshift(newT);
+                         }
+                         document.getElementById('magic-input').value = '';
+                         app.render();
+                    }
+                } catch (e) { alert('No se pudo interpretar.'); }
+                state.magicLoading = false; app.render();
             },
             handleImageUpload: (input) => {
                 const file = input.files[0];
@@ -649,49 +812,53 @@
             analyzeImage: async () => {
                 if (!state.scannedImage) return;
                 const btn = document.getElementById('btn-scan');
-                btn.textContent = 'Processing...'; btn.disabled = true;
+                btn.textContent = 'Procesando...'; btn.disabled = true;
                 const system = `Extract receipt data to JSON Array: [{description, amount (number), type (usually expense), date (YYYY-MM-DD), category}].`;
                 const res = await app.callGemini("Extract items.", system, state.scannedImage);
-                try {
-                    let data = JSON.parse(res.replace(/```json/g, '').replace(/```/g, '').trim());
-                    if (!Array.isArray(data)) data = [data];
-                    state.scannedTransactions = data;
-                    document.getElementById('scan-results').innerHTML = data.map((item, idx) => `
-                        <div class="bg-slate-50 p-2 rounded border border-slate-200 text-xs flex justify-between items-center">
-                            <div class="truncate mr-2 font-medium text-slate-700">${item.description}</div>
-                            <div class="flex gap-2 items-center">
-                                <span class="font-bold text-slate-900">$${item.amount}</span>
-                                <button onclick="app.importScanned(${idx})" class="p-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200"><i data-lucide="check" class="w-3 h-3"></i></button>
-                            </div>
-                        </div>`).join('');
-                    if (data.length > 0) document.getElementById('scan-actions').classList.remove('hidden');
-                    lucide.createIcons();
-                } catch (e) { alert('Error reading image'); }
-                btn.textContent = 'Process Image'; btn.disabled = false;
+                if (res) {
+                    try {
+                        let data = JSON.parse(res.replace(/```json/g, '').replace(/```/g, '').trim());
+                        if (!Array.isArray(data)) data = [data];
+                        state.scannedTransactions = data;
+                        document.getElementById('scan-results').innerHTML = data.map((item, idx) => `
+                            <div class="bg-slate-50 p-2 rounded border border-slate-200 text-xs flex justify-between items-center">
+                                <div class="truncate mr-2 font-medium text-slate-700">${item.description}</div>
+                                <div class="flex gap-2 items-center">
+                                    <span class="font-bold text-slate-900">$${item.amount}</span>
+                                    <button onclick="app.importScanned(${idx})" class="p-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200"><i data-lucide="check" class="w-3 h-3"></i></button>
+                                </div>
+                            </div>`).join('');
+                        if (data.length > 0) document.getElementById('scan-actions').classList.remove('hidden');
+                        lucide.createIcons();
+                    } catch (e) { alert('Error leyendo imagen'); }
+                }
+                btn.textContent = 'Procesar Imagen'; btn.disabled = false;
             },
             importScanned: async (idx) => {
                 const item = state.scannedTransactions[idx];
                 const acc = document.getElementById('scanner-account').value;
-                await fetchAPI('/transactions', 'POST', {
+                const newT = await fetchAPI('/transactions', 'POST', {
                     amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
-                    category: item.category || 'Other', account: acc, date: item.date || new Date().toISOString().split('T')[0],
+                    category: item.category || 'Otros', account: acc, date: item.date || new Date().toISOString().split('T')[0],
                     createdAt: new Date().toISOString()
                 });
+                state.transactions.unshift(newT);
                 state.scannedTransactions.splice(idx, 1);
                 document.getElementById('scan-results').children[idx].remove(); 
                 if(state.scannedTransactions.length === 0) app.clearImage();
+                app.render();
             },
             importAllScanned: async () => {
                 const acc = document.getElementById('scanner-account').value;
                 for (const item of state.scannedTransactions) {
                     await fetchAPI('/transactions', 'POST', {
                         amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
-                        category: item.category || 'Other', account: acc, date: item.date || new Date().toISOString().split('T')[0],
+                        category: item.category || 'Otros', account: acc, date: item.date || new Date().toISOString().split('T')[0],
                         createdAt: new Date().toISOString()
                     });
                 }
                 app.clearImage();
-                const trans = await fetchAPI('/transactions'); state.transactions = trans; app.render();
+                state.transactions = await fetchAPI('/transactions'); app.render();
             },
             buyInvestment: async () => {
                 const sym = document.getElementById('inv-symbol').value.toUpperCase();
@@ -713,38 +880,26 @@
                 const invs = await fetchAPI('/investments'); state.investments = invs; app.render();
             },
             editPrice: async (id) => {
-                const newPrice = prompt("Update Market Price:");
+                const newPrice = prompt("Actualizar Precio de Mercado:");
                 if (newPrice && !isNaN(newPrice)) {
                     await fetchAPI('/investments', 'POST', { id, currentPrice: parseFloat(newPrice) });
                     state.investments = await fetchAPI('/investments'); app.render();
                 }
             },
             deleteInvestment: async (id) => {
-                if (!confirm('Delete position?')) return;
+                if (!confirm('¿Eliminar posición?')) return;
                 await fetchAPI(`/investments?id=${id}`, 'DELETE');
                 state.investments = state.investments.filter(i => i.id !== id); app.render();
             },
-            generateAIReport: async () => {
-                state.aiLoading = true;
-                const btn = document.getElementById('btn-ai-report');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<div class="loader border-white border-t-transparent mr-2"></div> Analyzing...';
-                
-                const stats = getStats();
-                const financialData = { balance: { income: stats.totalIncome, expenses: stats.totalExpense, net: stats.balance, equity: stats.totalNetWorth }, expenses_by_cat: stats.expenseByCategory };
-                const prompt = `Analyze: ${JSON.stringify(financialData)}. Act as Senior Financial Advisor. Generate plain text report: 1. DIAGNOSIS (One punchy sentence). 2. ANALYSIS (Spending patterns). 3. ACTION PLAN (3 numbered, specific steps for next week). Professional tone.`;
-                const res = await app.callGemini(prompt);
-                
-                state.aiLoading = false; btn.innerHTML = originalText;
-                const c = document.getElementById('ai-result'); c.textContent = res; c.classList.remove('hidden'); c.classList.add('fade-in');
-            },
             getInvestmentAdvice: async (id, sym, avg, curr) => {
                 const c = document.getElementById(`advice-${id}`);
-                c.classList.remove('hidden'); c.textContent = "Analyzing market...";
+                c.classList.remove('hidden'); c.textContent = "Analizando mercado...";
                 const pl = ((curr - avg) / avg * 100).toFixed(2);
-                const prompt = `Act as Wall St Analyst. Asset: ${sym}. Buy Price: $${avg}. Current: $${curr}. Yield: ${pl}%. Give 1 serious sentence opinion (Hold/Sell/Buy) based on risk management.`;
+                const prompt = `Actúa como Analista de Wall St. Activo: ${sym}. Compra: $${avg}. Actual: $${curr}. Rendimiento: ${pl}%. Dame 1 frase seria de opinión (Mantener/Vender/Comprar) basada en gestión de riesgo. RESPONDE EN ESPAÑOL.`;
                 const res = await app.callGemini(prompt);
-                c.textContent = res; c.classList.remove('animate-pulse');
+                if(res) {
+                    c.textContent = res; c.classList.remove('animate-pulse');
+                }
             }
         };
 
@@ -765,7 +920,7 @@
         function renderCard(title, val1, val2, color, icon, val2Color = 'text-indigo-200') { return `<div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 relative overflow-hidden group hover:shadow-md transition-all"><div class="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-${color}-600"><i data-lucide="${icon}" class="w-16 h-16"></i></div><div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2"><i data-lucide="${icon}" class="w-4 h-4 text-${color}-500"></i> ${title}</div><div class="text-2xl font-bold text-slate-800 tracking-tight">${val1}</div><div class="text-xs ${val2Color === 'text-indigo-200' ? 'text-slate-400' : val2Color} mt-1 font-medium">${val2}</div></div>`; }
         function renderInput(lbl, type, id, ph, val = '', extra = '') { return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><input type="${type}" id="${id}" placeholder="${ph}" value="${val}" ${extra} class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all"></div>`; }
         function renderSelect(lbl, id, opts) { return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><select id="${id}" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all">${opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select></div>`; }
-        function getIconForCategory(cat) { const map = { 'Food': 'utensils', 'Transport': 'car', 'Services': 'zap', 'Leisure': 'beer', 'Health': 'heart', 'Salary': 'banknote', 'Sales': 'shopping-bag', 'Home': 'home', 'Education': 'graduation-cap' }; return map[cat] || 'circle-dollar-sign'; }
+        function getIconForCategory(cat) { const map = { 'Comida': 'utensils', 'Transporte': 'car', 'Servicios': 'zap', 'Ocio': 'beer', 'Salud': 'heart', 'Sueldo': 'banknote', 'Ventas': 'shopping-bag', 'Hogar': 'home', 'Educación': 'graduation-cap' }; return map[cat] || 'circle-dollar-sign'; }
         function formatDate(dateStr) { if(!dateStr) return ''; const [y, m, d] = dateStr.split('-'); return `${d}/${m}`; }
 
         // Start Auth Listener
