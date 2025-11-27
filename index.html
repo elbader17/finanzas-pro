@@ -309,6 +309,8 @@
                 // Cleanup charts
                 if (state.charts.cashFlow) { state.charts.cashFlow.destroy(); state.charts.cashFlow = null; }
                 if (state.charts.accounts) { state.charts.accounts.destroy(); state.charts.accounts = null; }
+                if (state.charts.expenses) { state.charts.expenses.destroy(); state.charts.expenses = null; }
+                if (state.charts.balances) { state.charts.balances.destroy(); state.charts.balances = null; }
 
                 if (state.activeTab === 'dashboard') app.renderDashboard(content);
                 else if (state.activeTab === 'transactions') app.renderTransactions(content);
@@ -321,11 +323,9 @@
 
             // --- QUOTA HELPERS ---
             updateQuota: async () => {
-                // Fetch fresh quota from backend (Backend recalculates based on logs)
                 const q = await fetchAPI('/ai/quota');
                 if (q) {
                     state.quota = q;
-                    // Solo renderizamos si estamos en una vista que muestra la cuota
                     if(document.getElementById('ai-result') || document.getElementById('scanner-upload-area')) {
                         app.render();
                     }
@@ -341,7 +341,7 @@
                 return `<span class="inline-flex items-center gap-1 ${color} text-[10px] font-bold px-2 py-0.5 rounded-full border border-current opacity-80"><i data-lucide="battery-charging" class="w-3 h-3"></i> ${q.remaining}/${q.limit}</span>`;
             },
 
-            // --- DASHBOARD ---
+            // --- DASHBOARD (MEJORADO) ---
             renderDashboard: (container) => {
                 const stats = getStats();
                 const pl = stats.investmentValue - stats.investmentCost;
@@ -361,7 +361,7 @@
                                     ${state.aiLoading ? '<div class="loader border-white border-t-transparent mr-2"></div> Analizando...' : '<i data-lucide="sparkles" class="w-4 h-4 text-yellow-300 group-hover:rotate-12 transition-transform"></i> Generar Reporte'}
                                 </button>
                             </div>
-                            
+                           
                             ${state.aiReportText ? `
                                 <div id="ai-result" class="mt-6 bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 text-sm whitespace-pre-line leading-relaxed font-light tracking-wide text-indigo-50 relative fade-in">
                                     <button onclick="app.clearAIReport()" class="absolute top-3 right-3 text-indigo-300 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors" title="Cerrar Reporte">
@@ -379,20 +379,32 @@
                             ${renderCard('Ahorro', `${savingsRate}%`, 'Tasa Mensual', 'blue', 'piggy-bank')}
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
-                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Flujo de Caja</h3>
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-emerald-500 rounded-full"></div> Flujo de Caja</h3>
                                 <div class="relative h-60 w-full"><canvas id="chartCashFlow"></canvas></div>
                             </div>
+                            
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
-                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Asignación de Activos</h3>
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-blue-500 rounded-full"></div> Saldos por Cuenta</h3>
+                                <div class="relative h-60 w-full"><canvas id="chartBalances"></canvas></div>
+                            </div>
+
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Activos vs Pasivos (Aprox)</h3>
                                 <div class="relative h-60 w-full flex justify-center"><canvas id="chartAccounts"></canvas></div>
+                            </div>
+
+                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-red-500 rounded-full"></div> Gastos por Categoría</h3>
+                                <div class="relative h-60 w-full flex justify-center"><canvas id="chartExpenses"></canvas></div>
                             </div>
                         </div>
                     </div>
                 `;
-                
+               
                 setTimeout(() => {
+                    // 1. CASH FLOW
                     const ctxCF = document.getElementById('chartCashFlow');
                     if(ctxCF) {
                         state.charts.cashFlow = new Chart(ctxCF.getContext('2d'), {
@@ -402,16 +414,73 @@
                         });
                     }
 
+                    // 2. ASSETS
                     const ctxAcc = document.getElementById('chartAccounts');
-                    if(ctxAcc && Object.keys(stats.accounts).length > 0) {
-                        state.charts.accounts = new Chart(ctxAcc.getContext('2d'), {
-                            type: 'doughnut',
-                            data: { labels: Object.keys(stats.accounts), datasets: [{ data: Object.values(stats.accounts), backgroundColor: ['#6366f1', '#8b5cf6', '#d946ef', '#f43f5e', '#ec4899', '#06b6d4', '#10b981', '#f59e0b'], borderWidth: 0 }] },
-                            options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8 } } } }
-                        });
-                    } else if (ctxAcc) {
-                        ctxAcc.parentNode.innerHTML = '<div class="h-full flex flex-col items-center justify-center text-slate-400 text-xs"><i data-lucide="bar-chart-2" class="w-8 h-8 mb-2 opacity-50"></i>Sin Datos</div>';
+                    // Usamos el total de inversiones vs el saldo disponible como simple desglose
+                    if(ctxAcc) {
+                         const saldoLiquido = stats.balance; // Simplificación: Efectivo disponible
+                         const invVal = stats.investmentValue;
+                         if (saldoLiquido > 0 || invVal > 0) {
+                            state.charts.accounts = new Chart(ctxAcc.getContext('2d'), {
+                                type: 'doughnut',
+                                data: { labels: ['Liquidez/Caja', 'Inversiones'], datasets: [{ data: [saldoLiquido > 0 ? saldoLiquido : 0, invVal], backgroundColor: ['#3b82f6', '#8b5cf6'], borderWidth: 0 }] },
+                                options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8 } } } }
+                            });
+                         } else {
+                            ctxAcc.parentNode.innerHTML = '<div class="h-full flex flex-col items-center justify-center text-slate-400 text-xs"><i data-lucide="pie-chart" class="w-8 h-8 mb-2 opacity-50"></i>Sin Activos</div>';
+                         }
                     }
+
+                    // 3. EXPENSES (NUEVO)
+                    const ctxExp = document.getElementById('chartExpenses');
+                    const expCats = Object.keys(stats.expenseByCategory);
+                    const expVals = Object.values(stats.expenseByCategory);
+                    if(ctxExp && expCats.length > 0) {
+                        state.charts.expenses = new Chart(ctxExp.getContext('2d'), {
+                            type: 'doughnut',
+                            data: { 
+                                labels: expCats, 
+                                datasets: [{ 
+                                    data: expVals, 
+                                    backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9'], 
+                                    borderWidth: 0 
+                                }] 
+                            },
+                            options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8, font: {size: 10} } } } }
+                        });
+                    } else if (ctxExp) {
+                        ctxExp.parentNode.innerHTML = '<div class="h-full flex flex-col items-center justify-center text-slate-400 text-xs"><i data-lucide="shopping-bag" class="w-8 h-8 mb-2 opacity-50"></i>Sin Gastos</div>';
+                    }
+
+                    // 4. BALANCES (NUEVO - SOLICITADO)
+                    const ctxBal = document.getElementById('chartBalances');
+                    // Filtramos cuentas con saldo 0
+                    const activeAccounts = Object.entries(stats.accounts).filter(([name, bal]) => bal !== 0);
+                    
+                    if(ctxBal && activeAccounts.length > 0) {
+                        state.charts.balances = new Chart(ctxBal.getContext('2d'), {
+                            type: 'bar',
+                            data: { 
+                                labels: activeAccounts.map(a => a[0]), 
+                                datasets: [{ 
+                                    label: 'Saldo',
+                                    data: activeAccounts.map(a => a[1]), 
+                                    backgroundColor: activeAccounts.map(a => a[1] >= 0 ? '#3b82f6' : '#ef4444'), 
+                                    borderRadius: 4,
+                                }] 
+                            },
+                            options: { 
+                                indexAxis: 'y', // Barras horizontales
+                                responsive: true, 
+                                maintainAspectRatio: false, 
+                                plugins: { legend: { display: false } }, 
+                                scales: { x: { grid: { display: false } } } 
+                            }
+                        });
+                    } else if (ctxBal) {
+                        ctxBal.parentNode.innerHTML = '<div class="h-full flex flex-col items-center justify-center text-slate-400 text-xs"><i data-lucide="credit-card" class="w-8 h-8 mb-2 opacity-50"></i>Sin Saldos</div>';
+                    }
+
                 }, 0);
             },
 
@@ -427,7 +496,7 @@
                         
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                             <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="zap" class="w-5 h-5 text-yellow-500"></i> Uso de IA</h3>
-                            
+                           
                             ${q.isUsingOwnKey ? 
                                 `<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center gap-3">
                                     <div class="bg-yellow-100 p-2 rounded-full text-yellow-600"><i data-lucide="crown" class="w-6 h-6"></i></div>
@@ -533,6 +602,21 @@
 
             renderTransactions: (container) => {
                 const accountOptions = state.accounts.map(a => `<option value="${a.name}">${a.name}</option>`).join('');
+                
+                // --- CORRECCIÓN DEL BUG ---
+                const hasImage = !!state.scannedImage;
+                const hasResults = state.scannedTransactions.length > 0;
+                
+                // Generamos el HTML de los resultados guardados en el estado
+                const resultsHtml = state.scannedTransactions.map((item, idx) => `
+                    <div class="bg-slate-50 p-2 rounded border border-slate-200 text-xs flex justify-between items-center">
+                        <div class="truncate mr-2 font-medium text-slate-700">${item.description}</div>
+                        <div class="flex gap-2 items-center">
+                            <span class="font-bold text-slate-900">$${item.amount}</span>
+                            <button onclick="app.importScanned(${idx})" class="p-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200"><i data-lucide="check" class="w-3 h-3"></i></button>
+                        </div>
+                    </div>`).join('');
+
                 container.innerHTML = `
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in pb-20">
                         <div class="lg:col-span-1 space-y-4">
@@ -543,19 +627,27 @@
                                     ${app.renderQuotaBadge()}
                                 </div>
                                 <div class="mb-3 relative z-10"><select id="scanner-account" class="w-full p-2 text-sm bg-emerald-50/50 border border-emerald-100 rounded-lg text-emerald-800">${accountOptions}</select></div>
-                                <div id="scanner-upload-area" class="border-2 border-dashed border-emerald-200 rounded-xl p-6 text-center hover:bg-emerald-50/30 transition-colors relative cursor-pointer bg-white">
+                                
+                                <div id="scanner-upload-area" class="${hasImage ? 'hidden' : ''} border-2 border-dashed border-emerald-200 rounded-xl p-6 text-center hover:bg-emerald-50/30 transition-colors relative cursor-pointer bg-white">
                                     <input type="file" accept="image/*" onchange="app.handleImageUpload(this)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
                                     <div class="bg-emerald-100 w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2 text-emerald-600"><i data-lucide="camera" class="w-5 h-5"></i></div>
                                     <p class="text-xs text-emerald-700 font-medium">Foto de Recibo</p>
                                 </div>
-                                <div id="scanner-preview-area" class="hidden space-y-3 relative z-10">
+
+                                <div id="scanner-preview-area" class="${hasImage ? '' : 'hidden'} space-y-3 relative z-10">
                                     <div class="relative rounded-lg overflow-hidden border border-emerald-100 h-32 bg-slate-50">
-                                        <img id="img-preview" class="w-full h-full object-contain">
+                                        <img id="img-preview" src="${state.scannedImage || ''}" class="w-full h-full object-contain">
                                         <button onclick="app.clearImage()" class="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-red-500 backdrop-blur-sm"><i data-lucide="x" class="w-3 h-3"></i></button>
                                     </div>
                                     <button onclick="app.analyzeImage()" id="btn-scan" class="w-full bg-emerald-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-200 transition-all">Procesar Imagen</button>
-                                    <div id="scan-actions" class="hidden flex gap-2"><button onclick="app.importAllScanned()" class="flex-1 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-xs font-bold border border-emerald-200 hover:bg-emerald-100">Guardar Todo</button></div>
-                                    <div id="scan-results" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar"></div>
+                                    
+                                    <div id="scan-actions" class="${hasResults ? 'flex' : 'hidden'} gap-2">
+                                        <button onclick="app.importAllScanned()" class="flex-1 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-xs font-bold border border-emerald-200 hover:bg-emerald-100">Guardar Todo</button>
+                                    </div>
+                                    
+                                    <div id="scan-results" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                                        ${resultsHtml}
+                                    </div>
                                 </div>
                             </div>
 
@@ -655,7 +747,7 @@
                                         </div>
                                         <div id="advice-${inv.id}" class="hidden mt-3 bg-gradient-to-r from-indigo-50 to-violet-50 p-3 rounded-lg text-xs text-indigo-900 border border-indigo-100 leading-relaxed animate-pulse"></div>
                                     </div>`;
-                            }).join('')}
+                                }).join('')}
                         </div>
                     </div>`;
             },
@@ -726,9 +818,7 @@
             // --- GENERATE REPORT ---
             generateAIReport: async () => {
                 state.aiLoading = true;
-                // Render loading state
                 app.renderDashboard(document.getElementById('app-content'));
-                // IMPORTANT: Re-render icons so the spinner appears
                 lucide.createIcons();
                 
                 try {
@@ -744,9 +834,7 @@
                     }
                 } finally {
                     state.aiLoading = false;
-                    // Render final state (button normal again)
                     app.renderDashboard(document.getElementById('app-content'));
-                    // IMPORTANT: Re-render icons so the sparkle icon appears again
                     lucide.createIcons();
                 }
             },
@@ -771,10 +859,10 @@
                          const firstBracket = cleanRes.indexOf('[');
                          const lastBracket = cleanRes.lastIndexOf(']');
                          if (firstBracket !== -1 && lastBracket !== -1) cleanRes = cleanRes.substring(firstBracket, lastBracket + 1);
-                         
+                        
                          let data = JSON.parse(cleanRes);
                          if (!Array.isArray(data)) data = [data];
-                         
+                        
                          for (const item of data) {
                             const newT = await fetchAPI('/transactions', 'POST', {
                                 amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
@@ -794,20 +882,16 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        document.getElementById('scanner-upload-area').classList.add('hidden');
-                        document.getElementById('scanner-preview-area').classList.remove('hidden');
-                        document.getElementById('img-preview').src = e.target.result;
                         state.scannedImage = e.target.result;
+                        // Bug Fix: Trigger render to update UI based on state.scannedImage
+                        app.render(); 
                     };
                     reader.readAsDataURL(file);
                 }
             },
             clearImage: () => {
                 state.scannedImage = null; state.scannedTransactions = [];
-                document.getElementById('scanner-upload-area').classList.remove('hidden');
-                document.getElementById('scanner-preview-area').classList.add('hidden');
-                document.getElementById('scan-results').innerHTML = '';
-                document.getElementById('scan-actions').classList.add('hidden');
+                app.render();
             },
             analyzeImage: async () => {
                 if (!state.scannedImage) return;
@@ -820,16 +904,7 @@
                         let data = JSON.parse(res.replace(/```json/g, '').replace(/```/g, '').trim());
                         if (!Array.isArray(data)) data = [data];
                         state.scannedTransactions = data;
-                        document.getElementById('scan-results').innerHTML = data.map((item, idx) => `
-                            <div class="bg-slate-50 p-2 rounded border border-slate-200 text-xs flex justify-between items-center">
-                                <div class="truncate mr-2 font-medium text-slate-700">${item.description}</div>
-                                <div class="flex gap-2 items-center">
-                                    <span class="font-bold text-slate-900">$${item.amount}</span>
-                                    <button onclick="app.importScanned(${idx})" class="p-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200"><i data-lucide="check" class="w-3 h-3"></i></button>
-                                </div>
-                            </div>`).join('');
-                        if (data.length > 0) document.getElementById('scan-actions').classList.remove('hidden');
-                        lucide.createIcons();
+                        app.render();
                     } catch (e) { alert('Error leyendo imagen'); }
                 }
                 btn.textContent = 'Procesar Imagen'; btn.disabled = false;
@@ -844,8 +919,9 @@
                 });
                 state.transactions.unshift(newT);
                 state.scannedTransactions.splice(idx, 1);
-                document.getElementById('scan-results').children[idx].remove(); 
-                if(state.scannedTransactions.length === 0) app.clearImage();
+                if(state.scannedTransactions.length === 0) {
+                     state.scannedImage = null;
+                }
                 app.render();
             },
             importAllScanned: async () => {
@@ -857,7 +933,8 @@
                         createdAt: new Date().toISOString()
                     });
                 }
-                app.clearImage();
+                state.scannedImage = null;
+                state.scannedTransactions = [];
                 state.transactions = await fetchAPI('/transactions'); app.render();
             },
             buyInvestment: async () => {
