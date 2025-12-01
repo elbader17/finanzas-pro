@@ -33,7 +33,7 @@
                         on:click={() => setTab(tab)} 
                         class="px-4 py-2 rounded-md text-sm font-medium transition-all {$activeTab === tab ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'}"
                     >
-                        {tab === 'dashboard' ? 'Resumen' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        {tab === 'dashboard' ? 'Resumen' : tab === 'investments' ? 'Gastos Compartidos' : tab.charAt(0).toUpperCase() + tab.slice(1)}
                     </button>
                 {/each}
                 <button 

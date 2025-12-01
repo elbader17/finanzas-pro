@@ -1,5 +1,5 @@
-export function getStats(transactions, investments, accounts) {
-    let totalIncome = 0, totalExpense = 0, investmentValue = 0, investmentCost = 0;
+export function getStats(transactions, accounts) {
+    let totalIncome = 0, totalExpense = 0;
     const accountBalances = {};
     const expenseByCategory = {};
 
@@ -19,18 +19,11 @@ export function getStats(transactions, investments, accounts) {
         }
     });
 
-    investments.forEach(i => {
-        investmentValue += i.quantity * i.currentPrice;
-        investmentCost += i.quantity * i.avgPrice;
-    });
-
     return {
         totalIncome,
         totalExpense,
         balance: totalIncome - totalExpense,
-        investmentValue,
-        investmentCost,
-        totalNetWorth: (totalIncome - totalExpense) + investmentValue,
+        totalNetWorth: (totalIncome - totalExpense),
         accounts: accountBalances,
         expenseByCategory
     };
