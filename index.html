@@ -4,17 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Finanzas Pro AI</title>
-    
-    <meta name="theme-color" content="#ffffff">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+    <title>DeepView</title>
+    <meta name="theme-color" content="#1e293b"> <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         // Configurar Worker de PDF.js
@@ -28,18 +24,20 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #1e293b; /* slate-900 */ border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         padding-top: env(safe-area-inset-top);
         padding-bottom: env(safe-area-inset-bottom);
 
-        /* ESTILOS PARA EL REPORTE MARKDOWN */
-        .markdown-body h1, .markdown-body h2, .markdown-body h3 { font-weight: 800; margin-top: 1em; margin-bottom: 0.5em; color: #e0e7ff; }
-        .markdown-body strong { font-weight: 700; color: #ffffff; }
+        /* ESTILOS PARA EL REPORTE MARKDOWN - AESTÉTICA SERIA */
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 { font-weight: 800; margin-top: 1em; margin-bottom: 0.5em; color: #1e293b; /* slate-900 */ }
+        .markdown-body strong { font-weight: 700; color: #0f172a; /* slate-900 */ }
         .markdown-body ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
         .markdown-body ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
         .markdown-body li { margin-bottom: 0.25em; }
         .markdown-body p { margin-bottom: 1em; }
+        .ai-report-dark h1, .ai-report-dark h2, .ai-report-dark h3 { color: #e0e7ff; } /* Headers on dark background */
+        .ai-report-dark strong { color: #ffffff; } /* Strong text on dark background */
     </style>
 </head>
 
@@ -48,10 +46,10 @@
     <div id="login-screen" class="fixed inset-0 z-50 bg-slate-50 flex flex-col items-center justify-center p-6">
         <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 p-8 fade-in">
             <div class="flex flex-col items-center mb-8">
-                <div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-3 rounded-2xl text-white shadow-lg shadow-indigo-200 mb-4">
+                <div class="bg-gradient-to-br from-indigo-700 to-slate-900 p-3 rounded-2xl text-white shadow-lg shadow-indigo-300 mb-4">
                     <i data-lucide="brain-circuit" class="w-8 h-8"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-slate-900">Finanzas Pro <span class="text-indigo-600">AI</span></h1>
+                <h1 class="text-2xl font-bold text-slate-900">Deep<span class="text-indigo-700">View</span></h1>
                 <p class="text-slate-400 text-sm mt-2">Inteligencia para tu dinero</p>
             </div>
 
@@ -64,10 +62,9 @@
                     <label class="text-xs font-bold text-slate-500 uppercase ml-1">Contraseña</label>
                     <input type="password" id="auth-password" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
                 </div>
-                
                 <div id="auth-error" class="hidden p-3 bg-red-50 text-red-600 text-xs rounded-lg font-medium text-center"></div>
 
-                <button type="submit" id="btn-auth-submit" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all mt-2">
+                <button type="submit" id="btn-auth-submit" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-700 shadow-lg shadow-slate-300 transition-all mt-2">
                     Iniciar Sesión
                 </button>
             </form>
@@ -75,7 +72,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-slate-500">
                     <span id="auth-toggle-text">¿No tienes cuenta?</span>
-                    <button onclick="auth.toggleMode()" class="text-indigo-600 font-bold hover:underline ml-1" id="btn-auth-toggle">Regístrate</button>
+                    <button onclick="auth.toggleMode()" class="text-indigo-700 font-bold hover:underline ml-1" id="btn-auth-toggle">Regístrate</button>
                 </p>
             </div>
         </div>
@@ -84,11 +81,11 @@
     <header id="app-header" class="hidden bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-20 pt-[env(safe-area-inset-top)]">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
+                <div class="bg-gradient-to-br from-indigo-700 to-slate-900 p-2 rounded-xl text-white shadow-lg shadow-indigo-300">
                     <i data-lucide="brain-circuit" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-slate-900 leading-tight tracking-tight">Finanzas Pro <span class="text-indigo-600">AI</span></h1>
+                    <h1 class="text-xl font-bold text-slate-900 leading-tight tracking-tight">Deep<span class="text-indigo-700">View</span></h1>
                     <div class="flex items-center gap-2">
                         <p id="connection-status" class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Conectando...</p>
                     </div>
@@ -124,7 +121,6 @@
         // --- 1. STATE & GLOBALS ---
         const API_URL_1 = "http://localhost:8080/api"
         const API_URL = "https://finanzas-backend-877934393466.us-central1.run.app/api"; 
-        
         const state = {
             token: localStorage.getItem('token'),
             isRegistering: false,
@@ -133,12 +129,10 @@
             investments: [],
             accounts: [],
             charts: {},
-            
             // AI State
             aiLoading: false,
             aiReportText: null,
             magicLoading: false,
-            
             scannedTransactions: [],
             scannedImage: null,
             quota: { used: 0, limit: 15, remaining: 15, isUsingOwnKey: false, resetDate: null },
@@ -190,7 +184,6 @@
                 const password = document.getElementById('auth-password').value;
                 const errorDiv = document.getElementById('auth-error');
                 const btn = document.getElementById('btn-auth-submit');
-                
                 btn.disabled = true;
                 btn.innerHTML = '<div class="loader border-white border-t-transparent mx-auto"></div>';
                 errorDiv.classList.add('hidden');
@@ -246,9 +239,7 @@
                     } 
                 };
                 if (body) options.body = JSON.stringify(body);
-                
                 const res = await fetch(`${API_URL}${endpoint}`, options);
-                
                 if (res.status === 401) {
                     auth.logout(); 
                     return null;
@@ -310,10 +301,11 @@
                     const mobBtn = document.getElementById(`mob-${id}`);
                     if (!deskBtn || !mobBtn) return;
 
+                    // Cambiando color de acento a indigo-700 / slate-900
                     if (id === state.activeTab) {
-                        deskBtn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200";
-                        mobBtn.className = "flex flex-col items-center text-indigo-600 p-2 scale-105 transition-transform";
-                        mobBtn.innerHTML = mobBtn.innerHTML.replace('text-slate-400', 'text-indigo-600');
+                        deskBtn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200";
+                        mobBtn.className = "flex flex-col items-center text-indigo-700 p-2 scale-105 transition-transform";
+                        mobBtn.innerHTML = mobBtn.innerHTML.replace('text-slate-400', 'text-indigo-700');
                     } else {
                         deskBtn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all text-slate-500 hover:text-slate-700 hover:bg-slate-200/50";
                         mobBtn.className = "flex flex-col items-center text-slate-400 p-2";
@@ -321,7 +313,6 @@
                 });
 
                 const content = document.getElementById('app-content');
-                
                 // Cleanup charts
                 if (state.charts.cashFlow) { state.charts.cashFlow.destroy(); state.charts.cashFlow = null; }
                 if (state.charts.accounts) { state.charts.accounts.destroy(); state.charts.accounts = null; }
@@ -362,7 +353,6 @@
                 const stats = getStats();
                 const pl = stats.investmentValue - stats.investmentCost;
                 const savingsRate = stats.totalIncome > 0 ? Math.round(((stats.totalIncome - stats.totalExpense) / stats.totalIncome) * 100) : 0;
-                
                 // Procesamos el Markdown si existe
                 let reportHtml = '';
                 if(state.aiReportText) {
@@ -371,7 +361,7 @@
 
                 container.innerHTML = `
                     <div class="space-y-6 fade-in pb-10">
-                        <div class="bg-gradient-to-r from-slate-900 to-indigo-900 rounded-2xl p-6 text-white shadow-xl shadow-indigo-900/20 relative overflow-hidden">
+                        <div class="bg-gradient-to-r from-slate-800 to-indigo-900 rounded-2xl p-6 text-white shadow-xl shadow-indigo-900/20 relative overflow-hidden">
                             <div class="absolute top-0 right-0 p-8 opacity-10"><i data-lucide="brain-circuit" class="w-32 h-32"></i></div>
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
                                 <div>
@@ -383,9 +373,8 @@
                                     ${state.aiLoading ? '<div class="loader border-white border-t-transparent mr-2"></div> Analizando...' : '<i data-lucide="sparkles" class="w-4 h-4 text-yellow-300 group-hover:rotate-12 transition-transform"></i> Generar Reporte'}
                                 </button>
                             </div>
-                           
                             ${state.aiReportText ? `
-                                <div id="ai-result" class="mt-6 bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 text-sm leading-relaxed font-light tracking-wide text-indigo-50 relative fade-in markdown-body">
+                                <div id="ai-result" class="mt-6 bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 text-sm leading-relaxed font-light tracking-wide text-indigo-50 relative fade-in markdown-body ai-report-dark">
                                     <button onclick="app.clearAIReport()" class="absolute top-3 right-3 text-indigo-300 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors" title="Cerrar Reporte">
                                         <i data-lucide="x" class="w-4 h-4"></i>
                                     </button>
@@ -395,7 +384,7 @@
                         </div>
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                            ${renderCard('Patrimonio', `$${stats.totalNetWorth.toLocaleString()}`, 'Activos Totales', 'indigo', 'wallet')}
+                            ${renderCard('Patrimonio', `$${stats.totalNetWorth.toLocaleString()}`, 'Activos Totales', 'slate', 'wallet')}
                             ${renderCard('Flujo', `$${stats.balance.toLocaleString()}`, `Ingresos: $${stats.totalIncome.toLocaleString()}`, 'emerald', 'activity')}
                             ${renderCard('Inversiones', `$${stats.investmentValue.toLocaleString()}`, `${pl >= 0 ? '+' : ''}$${pl.toLocaleString()} (G/P)`, 'violet', 'trending-up', pl >= 0 ? 'text-emerald-600' : 'text-red-500')}
                             ${renderCard('Ahorro', `${savingsRate}%`, 'Tasa Mensual', 'blue', 'piggy-bank')}
@@ -406,25 +395,23 @@
                                 <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-emerald-500 rounded-full"></div> Flujo de Caja</h3>
                                 <div class="relative h-60 w-full"><canvas id="chartCashFlow"></canvas></div>
                             </div>
-                            
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
                                 <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-blue-500 rounded-full"></div> Saldos por Cuenta</h3>
                                 <div class="relative h-60 w-full"><canvas id="chartBalances"></canvas></div>
                             </div>
 
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
-                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-500 rounded-full"></div> Activos vs Pasivos (Aprox)</h3>
+                                <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-indigo-700 rounded-full"></div> Activos vs Pasivos (Aprox)</h3>
                                 <div class="relative h-60 w-full flex justify-center"><canvas id="chartAccounts"></canvas></div>
                             </div>
 
-                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-80">
                                 <h3 class="font-bold text-slate-800 mb-6 text-sm flex items-center gap-2"><div class="w-1 h-4 bg-red-500 rounded-full"></div> Gastos por Categoría</h3>
                                 <div class="relative h-60 w-full flex justify-center"><canvas id="chartExpenses"></canvas></div>
                             </div>
                         </div>
                     </div>
                 `;
-               
                 setTimeout(() => {
                     // 1. CASH FLOW
                     const ctxCF = document.getElementById('chartCashFlow');
@@ -476,7 +463,6 @@
                     // 4. BALANCES
                     const ctxBal = document.getElementById('chartBalances');
                     const activeAccounts = Object.entries(stats.accounts).filter(([name, bal]) => bal !== 0);
-                    
                     if(ctxBal && activeAccounts.length > 0) {
                         state.charts.balances = new Chart(ctxBal.getContext('2d'), {
                             type: 'bar',
@@ -513,10 +499,8 @@
                 container.innerHTML = `
                     <div class="max-w-xl mx-auto space-y-6 fade-in pb-20">
                         <h2 class="text-2xl font-bold text-slate-800">Configuración</h2>
-                        
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                             <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="zap" class="w-5 h-5 text-yellow-500"></i> Uso de IA</h3>
-                           
                             ${q.isUsingOwnKey ? 
                                 `<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center gap-3">
                                     <div class="bg-yellow-100 p-2 rounded-full text-yellow-600"><i data-lucide="crown" class="w-6 h-6"></i></div>
@@ -529,10 +513,10 @@
                                 `<div>
                                     <div class="flex justify-between text-sm mb-1">
                                         <span class="text-slate-500">Créditos Semanales</span>
-                                        <span class="font-bold text-indigo-600">${q.remaining} / ${q.limit}</span>
+                                        <span class="font-bold text-indigo-700">${q.remaining} / ${q.limit}</span>
                                     </div>
                                     <div class="w-full bg-slate-100 rounded-full h-2.5 mb-2 overflow-hidden">
-                                        <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: ${(q.used / q.limit) * 100}%"></div>
+                                        <div class="bg-indigo-700 h-2.5 rounded-full transition-all duration-500" style="width: ${(q.used / q.limit) * 100}%"></div>
                                     </div>
                                     <p class="text-xs text-slate-400">Se renueva el: ${resetDate}</p>
                                 </div>`
@@ -540,7 +524,7 @@
                         </div>
 
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="key" class="w-5 h-5 text-indigo-500"></i> Gemini API Key</h3>
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="key" class="w-5 h-5 text-indigo-700"></i> Gemini API Key</h3>
                             <p class="text-sm text-slate-500 mb-6">Usa tu propia API Key de Google Gemini para eliminar los límites semanales.</p>
 
                             <form onsubmit="event.preventDefault(); app.saveSettings();" class="space-y-4">
@@ -548,18 +532,18 @@
                                     <span class="text-sm font-medium text-slate-700">Usar mi propia Key</span>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" id="set-useKey" class="sr-only peer" ${s.useOwnKey ? 'checked' : ''} onchange="document.getElementById('key-input-group').classList.toggle('opacity-50', !this.checked)">
-                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-700"></div>
                                     </label>
                                 </div>
 
                                 <div id="key-input-group" class="${s.useOwnKey ? '' : 'opacity-50'} transition-opacity">
                                     <div class="relative">
-                                        <input type="password" id="set-apiKey" placeholder="${s.hasKey ? '••••••••••••••••' : 'Pega tu API Key aquí'}" class="w-full p-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all pr-10">
+                                        <input type="password" id="set-apiKey" placeholder="${s.hasKey ? '••••••••••••••••' : 'Pega tu API Key aquí'}" class="w-full p-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-700 text-sm transition-all pr-10">
                                         <div class="absolute right-3 top-3 text-slate-400">
                                             ${s.hasKey ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-500"></i>' : '<i data-lucide="lock" class="w-5 h-5"></i>'}
                                         </div>
                                     </div>
-                                    <p class="text-[10px] text-slate-400 mt-1 ml-1">La Key se cifra de forma segura. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-indigo-500 hover:underline">Consigue una aquí</a></p>
+                                    <p class="text-[10px] text-slate-400 mt-1 ml-1">La Key se cifra de forma segura. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-indigo-700 hover:underline">Consigue una aquí</a></p>
                                 </div>
 
                                 <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all mt-2">Guardar Cambios</button>
@@ -572,7 +556,6 @@
             saveSettings: async () => {
                 const useOwnKey = document.getElementById('set-useKey').checked;
                 const apiKey = document.getElementById('set-apiKey').value;
-                
                 const body = { useOwnKey };
                 if (apiKey && !apiKey.startsWith('•••')) {
                     body.geminiApiKey = apiKey;
@@ -598,8 +581,8 @@
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                             <h2 class="text-lg font-bold text-slate-800 mb-4">Agregar Cuenta</h2>
                             <form onsubmit="event.preventDefault(); app.addAccount();" class="flex gap-3">
-                                <input type="text" id="new-acc-name" placeholder="Ej: Billetera Crypto" class="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-medium hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all">Crear</button>
+                                <input type="text" id="new-acc-name" placeholder="Ej: Billetera Crypto" class="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-700 transition-all">
+                                <button type="submit" class="bg-indigo-700 text-white px-6 py-2 rounded-xl font-medium hover:bg-indigo-800 shadow-lg shadow-indigo-200 transition-all">Crear</button>
                             </form>
                         </div>
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
@@ -608,7 +591,7 @@
                                 ${state.accounts.map(acc => `
                                     <div class="p-5 flex justify-between items-center hover:bg-slate-50 transition-colors group">
                                         <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600"><i data-lucide="landmark" class="w-5 h-5"></i></div>
+                                            <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-700"><i data-lucide="landmark" class="w-5 h-5"></i></div>
                                             <span class="font-medium text-slate-800">${acc.name}</span>
                                         </div>
                                         <div class="flex gap-1">
@@ -622,10 +605,10 @@
 
             renderTransactions: (container) => {
                 const accountOptions = state.accounts.map(a => `<option value="${a.name}">${a.name}</option>`).join('');
-                
+            
                 const hasImage = !!state.scannedImage;
                 const hasResults = state.scannedTransactions.length > 0;
-                
+            
                 const resultsHtml = state.scannedTransactions.map((item, idx) => `
                     <div class="bg-slate-50 p-2 rounded border border-slate-200 text-xs flex justify-between items-center">
                         <div class="truncate mr-2 font-medium text-slate-700">${item.description}</div>
@@ -645,7 +628,7 @@
                                     ${app.renderQuotaBadge()}
                                 </div>
                                 <div class="mb-3 relative z-10"><select id="scanner-account" class="w-full p-2 text-sm bg-emerald-50/50 border border-emerald-100 rounded-lg text-emerald-800">${accountOptions}</select></div>
-                                
+                            
                                 <div id="scanner-upload-area" class="${hasImage ? 'hidden' : ''} border-2 border-dashed border-emerald-200 rounded-xl p-6 text-center hover:bg-emerald-50/30 transition-colors relative cursor-pointer bg-white">
                                     <input type="file" accept="image/*,application/pdf" onchange="app.handleImageUpload(this)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
                                     <div class="bg-emerald-100 w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2 text-emerald-600"><i data-lucide="camera" class="w-5 h-5"></i></div>
@@ -658,11 +641,11 @@
                                         <button onclick="app.clearImage()" class="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-red-500 backdrop-blur-sm"><i data-lucide="x" class="w-3 h-3"></i></button>
                                     </div>
                                     <button onclick="app.analyzeImage()" id="btn-scan" class="w-full bg-emerald-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-200 transition-all">Procesar Imagen</button>
-                                    
+                                
                                     <div id="scan-actions" class="${hasResults ? 'flex' : 'hidden'} gap-2">
                                         <button onclick="app.importAllScanned()" class="flex-1 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-xs font-bold border border-emerald-200 hover:bg-emerald-100">Guardar Todo</button>
                                     </div>
-                                    
+                                
                                     <div id="scan-results" class="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                                         ${resultsHtml}
                                     </div>
@@ -670,9 +653,9 @@
                             </div>
 
                             <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 p-5 relative overflow-hidden">
-                                <h2 class="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-500"></i> Entrada Mágica</h2>
-                                <textarea id="magic-input" placeholder="Ej: Almuerzo en McDonald's $15 con tarjeta de débito" class="w-full p-3 text-sm bg-indigo-50/30 border border-indigo-100 rounded-xl focus:ring-2 focus:ring-indigo-500 resize-none h-20 mb-3 transition-all"></textarea>
-                                <button onclick="app.handleMagicEntry()" id="btn-magic" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all">${state.magicLoading ? 'Interpretando...' : 'Auto-Completar'}</button>
+                                <h2 class="text-sm font-bold text-indigo-900 mb-2 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-700"></i> Entrada Mágica</h2>
+                                <textarea id="magic-input" placeholder="Ej: Almuerzo en McDonald's $15 con tarjeta de débito" class="w-full p-3 text-sm bg-indigo-50/30 border border-indigo-100 rounded-xl focus:ring-2 focus:ring-indigo-700 resize-none h-20 mb-3 transition-all"></textarea>
+                                <button onclick="app.handleMagicEntry()" id="btn-magic" class="w-full bg-indigo-700 text-white py-2 rounded-lg text-xs font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-800 transition-all">${state.magicLoading ? 'Interpretando...' : 'Auto-Completar'}</button>
                             </div>
 
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sticky top-24">
@@ -755,17 +738,17 @@
                                             </div>
                                             <div class="flex items-center gap-6">
                                                 <div class="text-right hidden sm:block"><p class="text-[10px] font-bold text-slate-400 uppercase">Tenencia</p><p class="font-mono font-medium text-slate-700">${inv.quantity} <span class="text-xs text-slate-400">@ $${inv.avgPrice.toFixed(0)}</span></p></div>
-                                                <div class="text-right"><p class="text-[10px] font-bold text-slate-400 uppercase">Precio</p><button onclick="app.editPrice('${inv.id}')" class="font-bold text-slate-900 border-b border-dashed border-slate-300 hover:text-indigo-600 hover:border-indigo-600 transition-colors">$${inv.currentPrice.toFixed(2)}</button></div>
+                                                <div class="text-right"><p class="text-[10px] font-bold text-slate-400 uppercase">Precio</p><button onclick="app.editPrice('${inv.id}')" class="font-bold text-slate-900 border-b border-dashed border-slate-300 hover:text-indigo-700 hover:border-indigo-700 transition-colors">$${inv.currentPrice.toFixed(2)}</button></div>
                                                 <div class="text-right w-24"><div class="font-bold text-lg ${isPos ? 'text-emerald-600' : 'text-red-500'}">${isPos ? '+' : ''}${plPercent}%</div><p class="text-xs text-slate-400">$${pl.toFixed(0)}</p></div>
                                             </div>
                                         </div>
                                         <div class="border-t border-slate-50 pt-3 mt-4 flex justify-between items-center">
-                                            <button onclick="app.getInvestmentAdvice('${inv.id}', '${inv.symbol}', ${inv.avgPrice}, ${inv.currentPrice})" id="btn-advice-${inv.id}" class="text-xs text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 font-medium transition-colors flex items-center gap-1.5"><i data-lucide="sparkles" class="w-3 h-3"></i> Análisis AI</button>
+                                            <button onclick="app.getInvestmentAdvice('${inv.id}', '${inv.symbol}', ${inv.avgPrice}, ${inv.currentPrice})" id="btn-advice-${inv.id}" class="text-xs text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 font-medium transition-colors flex items-center gap-1.5"><i data-lucide="sparkles" class="w-3 h-3"></i> Análisis AI</button>
                                             <button onclick="app.deleteInvestment('${inv.id}')" class="text-slate-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                                         </div>
                                         <div id="advice-${inv.id}" class="hidden mt-3 bg-gradient-to-r from-indigo-50 to-violet-50 p-3 rounded-lg text-xs text-indigo-900 border border-indigo-100 leading-relaxed animate-pulse"></div>
                                     </div>`;
-                                }).join('')}
+                            }).join('')}
                         </div>
                     </div>`;
             },
@@ -812,17 +795,17 @@
                 await fetchAPI(`/transactions?id=${id}`, 'DELETE');
                 state.transactions = state.transactions.filter(t => t.id !== id); app.render();
             },
-            
+        
             // --- AI & MAGIC ---
             callGemini: async (prompt, systemInstruction = "", imageBase64 = null) => {
                 try {
                     let cleanBase64 = null;
                     if (imageBase64) cleanBase64 = imageBase64.split(',')[1]; 
                     const data = await fetchAPI('/ai/generate', 'POST', { prompt, systemInstruction, imageBase64: cleanBase64 });
-                    
+            
                     // UPDATE QUOTA FROM SERVER (SOURCE OF TRUTH)
                     await app.updateQuota();
-                    
+            
                     return data.candidates?.[0]?.content?.parts?.[0]?.text || "No se generó respuesta.";
                 } catch (error) { 
                     if (error.status === 403) {
@@ -832,21 +815,21 @@
                     return null; 
                 }
             },
-            
+        
             // --- GENERATE REPORT ---
             generateAIReport: async () => {
                 state.aiLoading = true;
                 app.renderDashboard(document.getElementById('app-content'));
                 lucide.createIcons();
-                
+            
                 try {
                     const stats = getStats();
                     const financialData = { balance: { income: stats.totalIncome, expenses: stats.totalExpense, net: stats.balance, equity: stats.totalNetWorth }, expenses_by_cat: stats.expenseByCategory };
-                    
+            
                     const prompt = `Analiza: ${JSON.stringify(financialData)}. Actúa como Asesor Financiero Senior. Genera un reporte en MARKDOWN: 1. **DIAGNÓSTICO** (Una frase contundente). 2. **ANÁLISIS** (Patrones de gasto). 3. **PLAN DE ACCIÓN** (3 pasos numerados para la próxima semana). Tono profesional. RESPONDE SIEMPRE EN ESPAÑOL.`;
-                    
+            
                     const res = await app.callGemini(prompt);
-                    
+            
                     if(res) {
                         state.aiReportText = res;
                     }
@@ -869,6 +852,9 @@
                 state.magicLoading = true; app.render();
                 setTimeout(() => { document.getElementById('magic-input').value = text; document.getElementById('magic-input').focus(); }, 50);
 
+                // **CORRECCIÓN 1: Obtener la cuenta seleccionada/default del escáner para la entrada mágica**
+                const selectedAccount = document.getElementById('scanner-account')?.value || state.accounts[0]?.name || 'Efectivo';
+            
                 const system = `Actúa como API. Devuelve JSON Array. Reglas: Detecta INGRESO/GASTO. Extrae: description, amount, type (income/expense), date (YYYY-MM-DD), category (Comida, Transporte, Servicios, Ocio, Salud, Sueldo, Ventas, Hogar, Educación, Otros). Hoy es ${new Date().toISOString().split('T')[0]}.`;
                 try {
                     const res = await app.callGemini(text, system);
@@ -877,17 +863,19 @@
                          const firstBracket = cleanRes.indexOf('[');
                          const lastBracket = cleanRes.lastIndexOf(']');
                          if (firstBracket !== -1 && lastBracket !== -1) cleanRes = cleanRes.substring(firstBracket, lastBracket + 1);
-                        
+            
                          let data = JSON.parse(cleanRes);
                          if (!Array.isArray(data)) data = [data];
-                        
+            
                          for (const item of data) {
-                            const newT = await fetchAPI('/transactions', 'POST', {
-                                amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
-                                category: item.category || 'Otros', account: state.accounts[0]?.name || 'Efectivo', date: item.date || new Date().toISOString().split('T')[0],
-                                createdAt: new Date().toISOString()
-                            });
-                            if(newT) state.transactions.unshift(newT);
+                             const newT = await fetchAPI('/transactions', 'POST', {
+                                 amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
+                                 category: item.category || 'Otros', 
+                                 account: selectedAccount, // **CORRECCIÓN 2: Usar la cuenta obtenida**
+                                 date: item.date || new Date().toISOString().split('T')[0],
+                                 createdAt: new Date().toISOString()
+                             });
+                             if(newT) state.transactions.unshift(newT);
                          }
                          document.getElementById('magic-input').value = '';
                          app.render();
@@ -895,7 +883,7 @@
                 } catch (e) { alert('No se pudo interpretar.'); }
                 state.magicLoading = false; app.render();
             },
-            
+        
             // --- MANEJO DE IMÁGENES Y PDF ---
             handleImageUpload: (input) => {
                 const file = input.files[0];
@@ -909,7 +897,7 @@
                             const typedarray = new Uint8Array(this.result);
                             const pdf = await pdfjsLib.getDocument(typedarray).promise;
                             const page = await pdf.getPage(1); // Obtener solo la primera página
-                            
+            
                             const viewport = page.getViewport({ scale: 1.5 });
                             const canvas = document.createElement('canvas');
                             const context = canvas.getContext('2d');
@@ -917,7 +905,7 @@
                             canvas.width = viewport.width;
 
                             await page.render({ canvasContext: context, viewport: viewport }).promise;
-                            
+            
                             // Convertir canvas a imagen (Data URL)
                             state.scannedImage = canvas.toDataURL('image/jpeg', 0.8);
                             app.render();
@@ -938,7 +926,7 @@
                     reader.readAsDataURL(file);
                 }
             },
-            
+        
             clearImage: () => {
                 state.scannedImage = null; state.scannedTransactions = [];
                 app.render();
@@ -951,9 +939,23 @@
                 const res = await app.callGemini("Extract items.", system, state.scannedImage);
                 if (res) {
                     try {
-                        let data = JSON.parse(res.replace(/```json/g, '').replace(/```/g, '').trim());
+                        let cleanRes = res.replace(/```json/g, '').replace(/```/g, '').trim();
+                        const firstBracket = cleanRes.indexOf('[');
+                        const lastBracket = cleanRes.lastIndexOf(']');
+                        if (firstBracket !== -1 && lastBracket !== -1) cleanRes = cleanRes.substring(firstBracket, lastBracket + 1);
+
+                        let data = JSON.parse(cleanRes);
                         if (!Array.isArray(data)) data = [data];
-                        state.scannedTransactions = data;
+
+                        // Filtrar y sanitizar transacciones (importante para prevenir errores)
+                        state.scannedTransactions = data.map(item => ({
+                            description: item.description || 'Gasto Escaneado',
+                            amount: parseFloat(item.amount) || 0,
+                            type: item.type || 'expense',
+                            date: item.date || new Date().toISOString().split('T')[0],
+                            category: item.category || 'Otros',
+                        })).filter(item => item.amount > 0); // Solo importar transacciones con un monto válido
+
                         app.render();
                     } catch (e) { alert('Error leyendo imagen'); }
                 }
@@ -961,10 +963,12 @@
             },
             importScanned: async (idx) => {
                 const item = state.scannedTransactions[idx];
-                const acc = document.getElementById('scanner-account').value;
+                const acc = document.getElementById('scanner-account').value; // **CORRECCIÓN 3: LEER LA CUENTA ELEGIDA**
                 const newT = await fetchAPI('/transactions', 'POST', {
                     amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
-                    category: item.category || 'Otros', account: acc, date: item.date || new Date().toISOString().split('T')[0],
+                    category: item.category || 'Otros', 
+                    account: acc, // **CORRECCIÓN 4: USAR LA CUENTA ELEGIDA**
+                    date: item.date || new Date().toISOString().split('T')[0],
                     createdAt: new Date().toISOString()
                 });
                 state.transactions.unshift(newT);
@@ -975,11 +979,13 @@
                 app.render();
             },
             importAllScanned: async () => {
-                const acc = document.getElementById('scanner-account').value;
+                const acc = document.getElementById('scanner-account').value; // **CORRECCIÓN 5: LEER LA CUENTA ELEGIDA**
                 for (const item of state.scannedTransactions) {
                     await fetchAPI('/transactions', 'POST', {
                         amount: parseFloat(item.amount), description: item.description, type: item.type || 'expense',
-                        category: item.category || 'Otros', account: acc, date: item.date || new Date().toISOString().split('T')[0],
+                        category: item.category || 'Otros', 
+                        account: acc, // **CORRECCIÓN 6: USAR LA CUENTA ELEGIDA**
+                        date: item.date || new Date().toISOString().split('T')[0],
                         createdAt: new Date().toISOString()
                     });
                 }
@@ -1045,8 +1051,8 @@
             return { totalIncome, totalExpense, balance: totalIncome - totalExpense, investmentValue, investmentCost, totalNetWorth: (totalIncome - totalExpense) + investmentValue, accounts: accountBalances, expenseByCategory };
         }
         function renderCard(title, val1, val2, color, icon, val2Color = 'text-indigo-200') { return `<div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 relative overflow-hidden group hover:shadow-md transition-all"><div class="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-${color}-600"><i data-lucide="${icon}" class="w-16 h-16"></i></div><div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2"><i data-lucide="${icon}" class="w-4 h-4 text-${color}-500"></i> ${title}</div><div class="text-2xl font-bold text-slate-800 tracking-tight">${val1}</div><div class="text-xs ${val2Color === 'text-indigo-200' ? 'text-slate-400' : val2Color} mt-1 font-medium">${val2}</div></div>`; }
-        function renderInput(lbl, type, id, ph, val = '', extra = '') { return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><input type="${type}" id="${id}" placeholder="${ph}" value="${val}" ${extra} class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all"></div>`; }
-        function renderSelect(lbl, id, opts) { return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><select id="${id}" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm transition-all">${opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select></div>`; }
+        function renderInput(lbl, type, id, ph, val = '', extra = '') { return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><input type="${type}" id="${id}" placeholder="${ph}" value="${val}" ${extra} class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-700 text-sm transition-all"></div>`; }
+        function renderSelect(lbl, id, opts) { return `<div class="flex flex-col gap-1 w-full"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">${lbl}</label><select id="${id}" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-700 text-sm transition-all">${opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select></div>`; }
         function getIconForCategory(cat) { const map = { 'Comida': 'utensils', 'Transporte': 'car', 'Servicios': 'zap', 'Ocio': 'beer', 'Salud': 'heart', 'Sueldo': 'banknote', 'Ventas': 'shopping-bag', 'Hogar': 'home', 'Educación': 'graduation-cap' }; return map[cat] || 'circle-dollar-sign'; }
         function formatDate(dateStr) { if(!dateStr) return ''; const [y, m, d] = dateStr.split('-'); return `${d}/${m}`; }
 
