@@ -2,6 +2,7 @@ import { user } from './stores';
 import { get } from 'svelte/store';
 
 export const API_URL = "https://finanzas-backend-877934393466.us-central1.run.app/api";
+// export const API_URL = "http://localhost:8080/api"
 
 export async function fetchAPI(endpoint, method = 'GET', body = null) {
     const token = get(user)?.token || (typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null);
